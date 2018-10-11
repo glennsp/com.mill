@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+	<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+</head>
+<body>
+  <h1>Mill WiFi settings</h1>
+	<fieldset>
+		<legend>Mill credentials</legend>
+		<div class="field row">
+				<label for="username">Username</label>
+				<input id="username" type="text" value="" />
+		</div>
+		<div class="field row">
+			<label for="password">Password</label>
+			<input id="password" type="password" value="" />
+		</div>
+	</fieldset>
+  <fieldset>
+	  <legend>Settings</legend>
+	  <div class="field row">
+		  <label for="interval">Poll interval (seconds)</label>
+		  <input id="interval" type="number" value="60" min="60" max="3600" />
+	  </div>
+  </fieldset>
+	<button id="save" class="left">Save</button>
+
+	<script type="text/javascript">
+
+	function onHomeyReady(Homey) {
+        var usernameElement = document.getElementById('username');
+        var passwordElement = document.getElementById('password');
+        var intervalElement = document.getElementById('interval');
+        var saveElement = document.getElementById('save');
+
+        Homey.get('username', function (err, name) {
+            if (err) return Homey.alert(err);
+            usernameElement.value = name;
+        });
+
+        Homey.get('password', function (err, password) {
+            if (err) return Homey.alert(err);
+            passwordElement.value = password;
+        });
+
+        Homey.get('interval', function (err, interval) {
+            if (err) return Homey.alert(err);
+            intervalElement.value = interval;
+        });
+
+        saveElement.addEventListener('click', function (e) {
+            Homey.set('interval', intervalElement.value || 60, function (err) {
+                if (err) return Homey.alert(err);
+            });
+
+            Homey.api('POST', '/authenticate', {
+                'username': usernameElement.value,
+                'password': passwordElement.value
+            }, function (err, result) {
+                if (err) return Homey.alert(err);
+
+                Homey.set('username', usernameElement.value, function (err) {
+                    if (err) return Homey.alert(err);
+                });
+
+                Homey.set('password', passwordElement.value, function (err) {
+                    if (err) return Homey.alert(err);
+                });
+
+                Homey.alert("Settings saved");
+            });
+        });
+
+        Homey.ready();
+    }
+	</script>
+ </body>
+</html>

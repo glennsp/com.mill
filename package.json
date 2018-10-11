@@ -1,0 +1,35 @@
+{
+  "name": "com.mill",
+  "version": "0.0.1",
+  "description": "Homey app for WiFi heating devices from Mill",
+  "main": "app.js",
+  "dependencies": {
+    "node-fetch": "2.2.0"
+  },
+  "devDependencies": {
+    "chai": "4.2.0",
+    "chai-as-promised": "7.1.1",
+    "mocha": "5.2.0",
+    "nock": "10.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:glennsp/com.mill.git"
+  },
+  "keywords": [
+    "thermostat",
+    "athom",
+    "homey",
+    "heating",
+    "mill"
+  ],
+  "author": "Glenn S. Pedersen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/glennsp/com.mill/issues"
+  },
+  "homepage": "https://github.com/glennsp/com.mill#readme"
+}

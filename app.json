@@ -1,0 +1,94 @@
+{
+  "id": "com.mill",
+  "version": "1.0.0",
+  "compatibility": ">=1.5.0",
+  "sdk": 2,
+  "name": {
+    "en": "Mill"
+  },
+  "tags": {
+    "en": [ "mill", "heating" ]
+  },
+  "description": {
+    "en": "Support for Mill Wifi heating"
+  },
+  "author": {
+    "name": "Glenn S. Pedersen",
+    "email": "glenn.pedersen@gmail.com"
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {}
+    }
+  },
+  "category": [
+    "climate"
+  ],
+  "permissions": [],
+  "images": {
+    "large": "/assets/images/large.png",
+    "small": "/assets/images/small.png"
+  },
+  "drivers": [
+    {
+      "id": "mill",
+      "name": {
+        "en": "Mill"
+      },
+      "class": "thermostat",
+      "capabilities": [
+        "measure_temperature",
+        "target_temperature",
+        "thermostat_mode"
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings"
+          },
+          "children": [
+            {
+                "id": "username",
+                "type": "text",
+                "label": {
+                  "en": "Username"
+                },
+                "value": "",
+                "hint": {
+                  "en": "Your Mill username"
+                }
+            },
+            {
+                "id": "password",
+                "type": "text",
+                "label": {
+                  "en": "Password"
+                },
+                "value": "",
+                "hint": {
+                  "en": "Your Mill password"
+                }
+            }
+          ]
+        }
+      ],
+      "pair":[
+        {
+          "id":"start"
+        },
+        {
+          "id":"list_devices",
+          "template":"list_devices",
+          "navigation":{
+          "next":"add_device"
+        }
+        },
+        {
+          "id":"add_device",
+          "template":"add_devices"
+        }
+        ]
+    }
+  ]
+}

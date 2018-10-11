@@ -1,0 +1,64 @@
+<style>
+	/* based on http://isabelcastillo.com/error-info-messages-css */
+	.busy, .info, .success, .warning, .error {
+		margin: 10px 0px;
+		padding:0px;
+	}
+	.busy     {color: #00529B;background-color: #BDE5F8;}
+	.info     {color: #00529B;background-color: #BDE5F8;}
+	.success  {color: #4F8A10;background-color: #DFF2BF;}
+	.warning  {color: #9F6000;background-color: #FEEFB3;}
+	.error    {color: #D8000C;background-color: #FFBABA;}
+	.busy i, .info i, .success i, .warning i, .error i {
+		margin:5px 7px;
+		vertical-align:middle;
+	}
+</style>
+<p data-i18n="pair.start.intro"></p>
+<div id="busy" class="busy"><i class="fa fa-cog fa-spin fa-2x fa-fw"></i><span>..</span></div>
+<div id="error" class="error"><i class="fa fa-times-circle fa-2x fa-fw"></i><span>..</span></div>
+<div id="success" class="success"><i class="fa fa-check fa-2x fa-fw"></i><span>..</span></div>
+<p align=right>
+	<button class="button right" onclick="Homey.done()" data-i18n="pair.start.buttonClose"></button>
+</p>
+<script>
+	function clearBusy() { $("#busy").hide() }
+	function showBusy(message, showTime) {
+		clearError()
+		clearSuccess()
+		$("#busy span").html(message)
+		$("#busy").show()
+		if (showTime) $("#busy").delay(showTime).fadeOut()
+	}
+
+	function clearError() { $("#error").hide() }
+	function showError(message, showTime) {
+		clearBusy()
+		clearSuccess()
+		$("#error span").html(message)
+		$("#error").show()
+		if (showTime) $("#error").delay(showTime).fadeOut()
+	}
+
+	function clearSuccess() { $("#success").hide() }
+	function showSuccess(message, showTime) {
+		clearBusy()
+		clearError()
+		$("#success span").html(message)
+		$("#success").show()
+		if (showTime) $("#success").delay(showTime).fadeOut()
+	}
+
+	Homey.setTitle( __('pair.start.title') );
+	showBusy(__('pair.start.messages.busyValidation'))
+	Homey.emit('start', function(error, result) {
+		if (error) {
+			showError(__('pair.start.messages.' + error))
+		} else {
+			showBusy(__('pair.start.messages.busyGetVehicles'))
+			// setTimeout(function() {
+				Homey.showView('list_devices')
+			// }, 3000)
+		}
+	})
+</script>
