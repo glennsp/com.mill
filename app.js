@@ -1,27 +1,46 @@
-'use strict';
-
+// eslint-disable-next-line import/no-unresolved
 const Homey = require('homey');
-const Mill = require('../../lib/mill');
+const Mill = require('./lib/mill');
 
 class MillApp extends Homey.App {
+  onInit() {
+    this.millApi = new Mill();
+    this.user = null;
+    this.isAuthenticated = false;
+    const username = Homey.ManagerSettings.get('username');
+    const password = Homey.ManagerSettings.get('password');
 
-	onInit() {
-		this.mill = new Mill();
+    if (username && password) {
+      this.authenticate(username, password)
+        .catch((e) => {
+          this.log('error while authenticating', e);
+        });
+    }
 
-		let username = Homey.ManagerSettings.get('username');
-		let password = Homey.ManagerSettings.get('password');
+    this.log(`${Homey.manifest.id} is running..`);
+  }
 
-		if(username && password) {
-			this.authenticate(username, password).catch(e=>{console.log('error', e)});
-		}
+  async authenticate(username, password) {
+    this.user = await this.millApi.login(username, password) || null;
+    this.isAuthenticated = true;
+    // this.user = await this.mill.login('glenn.pedersen@gmail.com', 'picTe7-cikhip-dobdim');
+  }
 
-		this.log(`${Homey.manifest.id} is running..`);
-	}
+  clear() {
+    this.user = null;
+  }
 
-	async authenticate(username, password) {
-		this.user = await this.mill.login(username, password);
-		//this.user = await this.mill.login('glenn.pedersen@gmail.com', 'picTe7-cikhip-dobdim');
-	}
+  isConnected() {
+    return this.isAuthenticated;
+  }
+
+  getUser() {
+    return this.user;
+  }
+
+  getMillApi() {
+    return this.millApi;
+  }
 }
 
 module.exports = MillApp;

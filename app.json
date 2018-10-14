@@ -29,6 +29,65 @@
     "large": "/assets/images/large.png",
     "small": "/assets/images/small.png"
   },
+  "capabilities": {
+    "mill_onoff": {
+			"type": "boolean",
+			"title": {
+				"en": "State"
+			},
+			"desc": {
+				"en": "State of the thermostat"
+			},
+			"getable": true,
+			"setable": false,
+			"greyout": true
+		},
+    "mill_mode": {
+			"type": "enum",
+			"title": {
+				"en": "Thermostat mode",
+				"nl": "Thermostaat modus"
+			},
+			"desc": {
+				"en": "Mode of the thermostat",
+				"nl": "Modus van de thermostaat"
+			},
+			"values": [
+        {
+					"id": "Program",
+					"title": {
+						"en": "Program"
+					}
+				},
+				{
+					"id": "Comfort",
+					"title": {
+						"en": "Comfort"
+					}
+				},
+				{
+					"id": "Sleep",
+					"title": {
+						"en": "Sleep"
+					}
+				},
+				{
+					"id": "Away",
+					"title": {
+						"en": "Away"
+					}
+				},
+				{
+					"id": "Off",
+					"title": {
+						"en": "Off"
+					}
+				}
+			],
+			"getable": true,
+			"setable": true
+		}
+  },
   "drivers": [
     {
       "id": "mill",
@@ -39,56 +98,66 @@
       "capabilities": [
         "measure_temperature",
         "target_temperature",
-        "thermostat_mode"
-      ],
-      "settings": [
-        {
-          "type": "group",
-          "label": {
-            "en": "General settings"
-          },
-          "children": [
-            {
-                "id": "username",
-                "type": "text",
-                "label": {
-                  "en": "Username"
-                },
-                "value": "",
-                "hint": {
-                  "en": "Your Mill username"
-                }
-            },
-            {
-                "id": "password",
-                "type": "text",
-                "label": {
-                  "en": "Password"
-                },
-                "value": "",
-                "hint": {
-                  "en": "Your Mill password"
-                }
-            }
-          ]
-        }
+        "mill_onoff",
+        "mill_mode"
       ],
       "pair":[
-        {
-          "id":"start"
-        },
         {
           "id":"list_devices",
           "template":"list_devices",
           "navigation":{
-          "next":"add_device"
-        }
+            "next":"add_device"
+          }
         },
         {
           "id":"add_device",
           "template":"add_devices"
         }
-        ]
+      ],
+      "mobile": {
+  			"components": [
+  				{
+  					"id": "icon",
+  					"capabilities": []
+  				},
+  				{
+  					"id": "sensor",
+  					"capabilities": [
+  						"measure_temperature",
+  						"mill_onoff"
+  					],
+  					"options": {
+  						"icons": {
+  							"mill_onoff": "/drivers/mill/assets/mill_onoff.svg"
+  						},
+  						"mill_onoff": {
+  							"noblink": false,
+  							"greyout": true,
+  							"label": {
+  								"true": {
+  									"en": "Active"
+  								},
+  								"false": {
+  									"en": "Idle"
+  								}
+  							}
+  						}
+  					}
+  				},
+  				{
+  					"id": "picker",
+  					"capabilities": [
+  						"mill_mode"
+  					]
+  				},
+  				{
+  					"id": "thermostat",
+  					"capabilities": [
+  						"target_temperature"
+  					]
+  				}
+  			]
+  		}
     }
   ]
 }

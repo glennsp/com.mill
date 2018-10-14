@@ -138,4 +138,14 @@ describe('login', function () {
     const rooms = await this.mill.changeRoomTemperature(201810061300110000, {sleepTemp: 17, awayTemp: 10, comfortTemp: 22});
     expect(rooms.errorCode).to.not.exist;
   });
+
+  it('should set mode correctly', async () => {
+    nock('http://eurouter.ablecloud.cn:5000')
+      .post('/millService/v1/changeRoomMode')
+      .reply(200, '');
+
+    const rooms = await this.mill.changeRoomMode(201810061300110000, {mode: 1});
+    expect(rooms.errorCode).to.not.exist;
+  });
+
 });
