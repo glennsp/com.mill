@@ -21,3 +21,6 @@ Use this app at your own risk. The app has been developed with the same APIs and
 
 ### v0.0.1
 * First version
+
+# Credits
+[Heat](https://thenounproject.com/search/?q=heat&i=860995) by Stan Diers from the Noun Project
