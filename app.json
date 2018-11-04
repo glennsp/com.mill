@@ -88,6 +88,191 @@
 			"setable": true
 		}
   },
+  "flow": {
+    "triggers": [
+      {
+          "id": "mill_mode_changed",
+          "title": {
+              "en": "Thermostat mode has changed"
+          },
+          "args": [
+  					{
+  						"name": "device",
+  						"type": "device",
+  						"filter": "driver_id=mill"
+  					}
+  				],
+          "tokens": [
+            {
+              "name": "mill_mode",
+              "type": "string",
+              "title": {
+                  "en": "Mode"
+              },
+              "example": "Comfort"
+            }
+          ]
+      },
+      {
+          "id": "mill_mode_changed_to",
+          "title": {
+              "en": "Thermostat mode has changed to"
+          },
+          "args": [
+            {
+              "type": "dropdown",
+              "name": "mill_mode",
+              "values": [
+        				{
+        					"id": "Comfort",
+        					"label": {
+        						"en": "Comfort"
+        					}
+        				},
+        				{
+        					"id": "Sleep",
+        					"label": {
+        						"en": "Sleep"
+        					}
+        				},
+        				{
+        					"id": "Away",
+        					"label": {
+        						"en": "Away"
+        					}
+        				},
+        				{
+        					"id": "Off",
+        					"label": {
+        						"en": "Off"
+        					}
+        				}
+              ]
+            },
+  					{
+  						"name": "device",
+  						"type": "device",
+  						"filter": "driver_id=mill"
+  					}
+          ]
+      }
+    ],
+    "conditions": [
+      {
+          "id": "mill_is_heating",
+          "title": {
+              "en": "!{{Is|Isn't}} heating"
+          },
+          "args": [
+  					{
+  						"name": "device",
+  						"type": "device",
+  						"filter": "driver_id=mill"
+  					}
+  				]
+      },
+      {
+          "id": "mill_mode_matching",
+          "title": {
+              "en": "Thermostat mode !{{is|isn't}}"
+          },
+          "args": [
+            {
+              "type": "dropdown",
+              "name": "mill_mode",
+              "values": [
+                {
+        					"id": "Program",
+        					"label": {
+        						"en": "Program"
+        					}
+        				},
+        				{
+        					"id": "Comfort",
+        					"label": {
+        						"en": "Comfort"
+        					}
+        				},
+        				{
+        					"id": "Sleep",
+        					"label": {
+        						"en": "Sleep"
+        					}
+        				},
+        				{
+        					"id": "Away",
+        					"label": {
+        						"en": "Away"
+        					}
+        				},
+        				{
+        					"id": "Off",
+        					"label": {
+        						"en": "Off"
+        					}
+        				}
+              ]
+            },
+  					{
+  						"name": "device",
+  						"type": "device",
+  						"filter": "driver_id=mill"
+  					}
+  				]
+      }
+    ],
+    "actions": [
+      {
+        "id": "mill_set_mode",
+        "title": {
+            "en": "Set thermostat mode"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=mill"
+          },
+          {
+            "type": "dropdown",
+            "name": "mill_mode",
+            "values": [
+              {
+      					"id": "Program",
+      					"label": {
+      						"en": "Program"
+      					}
+      				},
+      				{
+      					"id": "Comfort",
+      					"label": {
+      						"en": "Comfort"
+      					}
+      				},
+      				{
+      					"id": "Sleep",
+      					"label": {
+      						"en": "Sleep"
+      					}
+      				},
+      				{
+      					"id": "Away",
+      					"label": {
+      						"en": "Away"
+      					}
+      				},
+      				{
+      					"id": "Off",
+      					"label": {
+      						"en": "Off"
+      					}
+      				}
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "drivers": [
     {
       "id": "mill",

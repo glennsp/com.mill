@@ -12,7 +12,7 @@ module.exports = [
       } catch (error) {
         return callback(error);
       }
-    },
+    }
   },
   {
     method: 'POST',
@@ -20,6 +20,6 @@ module.exports = [
     fn: async (args, callback) => {
       Homey.app.clear();
       return callback(null, {});
-    },
-  },
+    }
+  }
 ];
