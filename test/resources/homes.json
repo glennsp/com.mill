@@ -1,0 +1,21 @@
+{
+  "hourSystem": 1,
+  "homeList": [
+    {
+      "homeAlways": 0,
+      "homeName": "My house",
+      "isHoliday": 0,
+      "holidayStartTime": 0,
+      "timeZone": "+2:00",
+      "modeMinute": 0,
+      "modeStartTime": 0,
+      "holidayTemp": 10,
+      "modeHour": 0,
+      "currentMode": 0,
+      "holidayEndTime": 0,
+      "homeType": 0,
+      "homeId": 201801011200100000,
+      "programId": 201801011200100000
+    }
+  ]
+}

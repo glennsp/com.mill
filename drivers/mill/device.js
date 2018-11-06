@@ -1,20 +1,20 @@
 // eslint-disable-next-line import/no-unresolved
 const Homey = require('homey');
+const Room = require('./../../lib/models');
 
 class MillDevice extends Homey.Device {
-  // this method is called when the Device is inited
   onInit() {
     this.deviceId = this.getData().id;
 
     this.log(`${this.getName()} ${this.getClass()} (${this.deviceId}) initialized`);
 
+    // capabilities
     this.registerCapabilityListener('target_temperature', this.onCapabilityTargetTemperature.bind(this));
     this.registerCapabilityListener('mill_mode', this.onCapabilityThermostatMode.bind(this));
 
     // triggers
     this.modeChangedTrigger = new Homey.FlowCardTriggerDevice('mill_mode_changed');
-    this.modeChangedTrigger
-      .register();
+    this.modeChangedTrigger.register();
 
     this.modeChangedToTrigger = new Homey.FlowCardTriggerDevice('mill_mode_changed_to');
     this.modeChangedToTrigger
@@ -30,10 +30,7 @@ class MillDevice extends Homey.Device {
     this.isMatchingModeCondition = new Homey.FlowCardCondition('mill_mode_matching');
     this.isMatchingModeCondition
       .register()
-      .registerRunListener(args => (
-        this.modeAsInt(args.mill_mode) === this.room.currentMode
-        || this.modeAsInt(args.mill_mode) === this.room.programMode
-      ));
+      .registerRunListener(args => (args.mill_mode === this.room.modeName));
 
     // actions
     this.setProgramAction = new Homey.FlowCardAction('mill_set_mode');
@@ -62,18 +59,18 @@ class MillDevice extends Homey.Device {
       if (this.room && (
         this.room.currentMode !== room.currentMode || this.room.programMode !== room.programMode
       )) {
-        this.modeChangedTrigger.trigger(this, { mill_mode: this.modeAsString(room) })
+        this.modeChangedTrigger.trigger(this, { mill_mode: this.room.modeName })
           .catch(this.error);
-        this.modeChangedToTrigger.trigger(this, null, { mill_mode: this.modeAsString(room) })
-          .catch(this.log);
+        this.modeChangedToTrigger.trigger(this, null, { mill_mode: this.room.modeName })
+          .catch(this.error);
       }
 
-      this.room = room;
+      this.room = new Room(room);
       Promise.all([
         this.setCapabilityValue('measure_temperature', room.avgTemp),
-        this.setCapabilityValue('target_temperature', this.getTargetTemp(room)),
-        this.setCapabilityValue('mill_mode', this.modeAsString(room)),
-        this.setCapabilityValue('mill_onoff', this.heatStatusAsString(room.heatStatus))
+        this.setCapabilityValue('target_temperature', room.targetTemp),
+        this.setCapabilityValue('mill_mode', room.modeName),
+        this.setCapabilityValue('mill_onoff', room.isHeating)
       ]).then(() => {
         this.scheduleRefresh();
       }).catch((error) => {
@@ -109,7 +106,7 @@ class MillDevice extends Homey.Device {
       this.log(`${logDate}: onCapabilityTargetTemperature(${value}=>${temp})`);
     }
     const millApi = Homey.app.getMillApi();
-    this.setTargetTemp(this.room, temp);
+    this.room.targetTemp = temp;
     millApi.changeRoomTemperature(this.deviceId, this.room)
       .then(() => {
         this.log(`${logDate}: onCapabilityTargetTemperature(${temp}) done`);
@@ -125,9 +122,9 @@ class MillDevice extends Homey.Device {
   setThermostatMode(value) {
     return new Promise((resolve, reject) => {
       const millApi = Homey.app.getMillApi();
-      this.room.currentMode = this.modeAsInt(value);
+      this.room.modeName = value;
       Promise.all([
-        this.setCapabilityValue('target_temperature', this.getTargetTemp(this.room)),
+        this.setCapabilityValue('target_temperature', this.room.targetTemp),
         millApi.changeRoomMode(this.deviceId, this.room.currentMode)
       ]).then(() => {
         this.log(`Changed mode for ${this.room.roomName} to ${value}: currentMode: ${this.room.currentMode}/${this.room.programMode}, comfortTemp: ${this.room.comfortTemp}, awayTemp: ${this.room.awayTemp}, avgTemp: ${this.room.avgTemp}, sleepTemp: ${this.room.sleepTemp}`);
@@ -143,73 +140,6 @@ class MillDevice extends Homey.Device {
     this.setThermostatMode(value)
       .then(result => callback(null, result))
       .catch(err => callback(err));
-  }
-
-  heatStatusAsString(status) {
-    return status === 1;
-  }
-
-  getTargetTemp(room) {
-    switch (room.currentMode>0?room.currentMode:room.programMode) {
-      case 1:
-        return room.comfortTemp;
-      case 2:
-        return room.sleepTemp;
-      case 3:
-        return room.awayTemp;
-      case 5:
-        return 0;
-      default:
-        return room.comfortTemp;
-    }
-  }
-
-  setTargetTemp(room, newTemp) {
-    switch (room.currentMode) {
-      case 1:
-        room.comfortTemp = newTemp;
-        break;
-      case 2:
-        room.sleepTemp = newTemp;
-        break;
-      case 3:
-        room.awayTemp = newTemp;
-        break;
-      default:
-        break;
-    }
-  }
-
-  modeAsString(room) {
-    switch (room.currentMode > 0 ? room.currentMode : room.programMode) {
-      case 1:
-        return 'Comfort';
-      case 2:
-        return 'Sleep';
-      case 3:
-        return 'Away';
-      case 5:
-        return 'Off';
-      default:
-        return `N/A (${room.currentMode} ${room.programMode})`;
-    }
-  }
-
-  modeAsInt(mode) {
-    switch (mode) {
-      case 'Program':
-        return 0;
-      case 'Comfort':
-        return 1;
-      case 'Sleep':
-        return 2;
-      case 'Away':
-        return 3;
-      case 'Off':
-        return 5;
-      default:
-        return 0;
-    }
   }
 }
 

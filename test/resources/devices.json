@@ -1,0 +1,36 @@
+{
+  "always": 0,
+  "backMinute": 0,
+  "roomProgramId": 201810061300100000,
+  "controlSource": "0,0,0",
+  "comfortTemp": 22,
+  "roomProgram": "Standard Program",
+  "awayTemp": 10,
+  "holidayTemp": 0,
+  "avgTemp": 22,
+  "roomId": 201810061347140000,
+  "roomName": "Living room",
+  "deviceInfo": [
+    {
+      "heaterFlag": 1,
+      "subDomainId": 5316,
+      "controlType": 0,
+      "currentTemp": 22,
+      "canChangeTemp": 0,
+      "deviceId": 47914,
+      "deviceName": "Livingroom",
+      "mac": "F0FE6BB08D70",
+      "deviceStatus": 0
+    }
+  ],
+  "backHour": 0,
+  "currentMode": 0,
+  "heatStatus": 1,
+  "offLineDeviceNum": 0,
+  "total": 1,
+  "independentCount": 0,
+  "sleepTemp": 17,
+  "onlineDeviceNum": 1,
+  "isOffline": 1,
+  "programMode": 1
+}

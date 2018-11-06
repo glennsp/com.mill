@@ -1,0 +1,37 @@
+{
+  "backMinute": 0,
+  "offLineDeviceNum": 0,
+  "mode": 0,
+  "homeAlways": 0,
+  "homeName": "Snorresgate",
+  "isHoliday": 0,
+  "onlineDeviceNum": 2,
+  "programList": [
+    {
+      "programName": "Standard Program",
+      "homeId": 201810061300100000,
+      "programId": 201810061300100000
+    }
+  ],
+  "homeType": 0,
+  "backHour": 0,
+  "roomInfo": [
+    {
+      "controlSource": "0,0,0",
+      "comfortTemp": 22,
+      "roomProgram": "Standard Program",
+      "awayTemp": 10,
+      "avgTemp": 21,
+      "roomId": 201810061300100000,
+      "roomName": "Livingroom",
+      "currentMode": 3,
+      "heatStatus": 0,
+      "offLineDeviceNum": 0,
+      "total": 1,
+      "independentCount": 0,
+      "sleepTemp": 17,
+      "onlineDeviceNum": 1,
+      "isOffline": 1
+    }
+  ]
+}
