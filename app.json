@@ -286,6 +286,10 @@
         "mill_onoff",
         "mill_mode"
       ],
+      "images": {
+        "large": "/drivers/mill/assets/images/large.png",
+        "small": "/drivers/mill/assets/images/small.png"
+      },
       "pair":[
         {
           "id":"list_devices",
