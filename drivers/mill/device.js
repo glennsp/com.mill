@@ -54,16 +54,18 @@ class MillDevice extends Homey.Device {
       const millApi = Homey.app.getMillApi();
 
       const room = await millApi.listDevices(this.getData().id);
-      this.log(`Refreshing state for ${room.roomName}: currentMode: ${room.currentMode}, comfortTemp: ${room.comfortTemp}, awayTemp: ${room.awayTemp}, avgTemp: ${room.avgTemp}, sleepTemp: ${room.sleepTemp}, heatStatus: ${room.heatStatus}`);
+      this.log(`Refreshing state for ${room.roomName}: current/program mode: ${room.currentMode}/${room.programMode}, comfort/sleep/away/holiday/avg temp: ${room.comfortTemp}/${room.sleepTemp}/${room.awayTemp}/${room.holidayTemp}/${room.avgTemp}, heatStatus: ${room.heatStatus}`);
 
-      if (this.room && (
-        this.room.currentMode !== room.currentMode || this.room.programMode !== room.programMode
-      )) {
-        this.modeChangedTrigger.trigger(this, { mill_mode: this.room.modeName })
+      /*
+      // not needed, setCapabilityValue will trigger
+      if (this.room && !this.room.modesMatch(room)) {
+        this.log(`Triggering mode change from ${this.room.modeName} to ${room.modeName}`);
+        this.modeChangedTrigger.trigger(this, { mill_mode: 'x'+room.modeName })
           .catch(this.error);
-        this.modeChangedToTrigger.trigger(this, null, { mill_mode: this.room.modeName })
+        this.modeChangedToTrigger.trigger(this, null, { mill_mode: 'y'+room.modeName })
           .catch(this.error);
       }
+      */
 
       this.room = new Room(room);
       Promise.all([
