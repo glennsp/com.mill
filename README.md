@@ -25,7 +25,12 @@ Supported actions:
 Open Settings and enter you Mill credentials before trying to add any Mill heaters.
 
 ### Supported Languages:
+
 * English
+
+### Privacy
+
+This app is using [sentry.io](http://sentry.io) to log exceptions and errors. By installing this app, you accept that the app may send error logs to Sentry. No personal or device information, like email, passwords, Homey identification etc., is ever sent, only logs regarding the error if that occurred. The logs includes exception messages, parts of source code, line numbers, app version etc.
 
 ### Disclaimer
 
@@ -33,6 +38,9 @@ Use this app at your own risk. The app has been developed with the same APIs and
 
 ### Change Log:
 
+#### v0.0.2
+* Added Sentry logging
+*
 #### v0.0.1
 * First version
 
