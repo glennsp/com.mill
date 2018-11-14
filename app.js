@@ -1,15 +1,9 @@
 // eslint-disable-next-line import/no-unresolved
 const Homey = require('homey');
-const Sentry = require('@sentry/node');
 const Mill = require('./lib/mill');
 
 class MillApp extends Homey.App {
   onInit() {
-    Sentry.init({
-      dsn: 'https://3474e68f802c435db291e7c489a7f0ea@sentry.io/1321923',
-      release: "com.mill@1.0.1"
-    });
-
     this.millApi = new Mill();
     this.user = null;
     this.isAuthenticated = false;

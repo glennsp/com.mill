@@ -4,7 +4,7 @@
   "description": "Homey app for WiFi heating devices from Mill",
   "main": "app.js",
   "dependencies": {
-    "@sentry/node": "4.3.0",
+    "homey-log": "1.0.6",
     "node-fetch": "2.2.0"
   },
   "devDependencies": {

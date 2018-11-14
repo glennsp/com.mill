@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved
 const Homey = require('homey');
+const { Log } = require('homey-log');
 const Room = require('./../../lib/models');
-const logException = require('./../../lib/logger');
 
 class MillDevice extends Homey.Device {
   onInit() {
@@ -54,39 +54,42 @@ class MillDevice extends Homey.Device {
 
     try {
       if (Homey.app.isConnected()) {
+        // throw new Error("Forced error");
         const millApi = Homey.app.getMillApi();
 
-        const room = await millApi.listDevices(this.getData().id);
-        this.log(`Refreshing state for ${room.roomName}: current/program mode: ${room.currentMode}/${room.programMode}, comfort/sleep/away/holiday/avg temp: ${room.comfortTemp}/${room.sleepTemp}/${room.awayTemp}/${room.holidayTemp}/${room.avgTemp}, heatStatus: ${room.heatStatus}`);
+        millApi.listDevices(this.getData().id)
+          .then((room) => {
+            this.log(`Refreshing state for ${room.roomName}: current/program mode: ${room.currentMode}/${room.programMode}, comfort/sleep/away/holiday/avg temp: ${room.comfortTemp}/${room.sleepTemp}/${room.awayTemp}/${room.holidayTemp}/${room.avgTemp}, heatStatus: ${room.heatStatus}`);
 
-        if (this.room && !this.room.modesMatch(room)) {
-          this.log(`Triggering mode change from ${this.room.modeName} to ${room.modeName}`);
-          // not needed, setCapabilityValue will trigger
-          // this.modeChangedTrigger.trigger(this, { mill_mode: 'x'+room.modeName })
-          //   .catch(this.error);
-          this.modeChangedToTrigger.trigger(this, null, { mill_mode: room.modeName })
-            .catch(this.error);
-        }
+            if (this.room && !this.room.modesMatch(room)) {
+              this.log(`Triggering mode change from ${this.room.modeName} to ${room.modeName}`);
+              // not needed, setCapabilityValue will trigger
+              // this.modeChangedTrigger.trigger(this, { mill_mode: 'x'+room.modeName })
+              //   .catch(this.error);
+              this.modeChangedToTrigger.trigger(this, null, { mill_mode: room.modeName })
+                .catch(this.error);
+            }
 
-        this.room = new Room(room);
-        Promise.all([
-          this.setCapabilityValue('measure_temperature', room.avgTemp),
-          this.setCapabilityValue('target_temperature', room.targetTemp),
-          this.setCapabilityValue('mill_mode', room.modeName),
-          this.setCapabilityValue('mill_onoff', room.isHeating)
-        ]).then(() => {
-          this.scheduleRefresh();
-        }).catch((error) => {
-          this.log(error);
-          logException(error);
-        });
+            this.room = new Room(room);
+            Promise.all([
+              this.setCapabilityValue('measure_temperature', room.avgTemp),
+              this.setCapabilityValue('target_temperature', room.targetTemp),
+              this.setCapabilityValue('mill_mode', room.modeName),
+              this.setCapabilityValue('mill_onoff', room.isHeating)
+            ]).then(() => {
+              this.scheduleRefresh();
+            }).catch((error) => {
+              Log.captureException(error);
+            });
+          }).catch((error) => {
+            this.log(`ERROR ${error}`);
+          });
       } else {
         this.log('Mill not connected');
         this.scheduleRefresh(10);
       }
     } catch (e) {
-      this.log(e);
-      logException(e);
+      Log.captureException(e);
     } finally {
       if (this.refreshTimeout === null) {
         this.scheduleRefresh();
