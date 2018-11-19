@@ -21,5 +21,13 @@ module.exports = [
       Homey.app.clear();
       return callback(null, {});
     }
+  },
+  {
+    method: 'POST',
+    path: '/clearLog',
+    fn: async (args, callback) => {
+      Homey.ManagerSettings.set('debugLog', []);
+      return callback(null, {});
+    }
   }
 ];
