@@ -11,8 +11,18 @@
   border-bottom:  1px solid #fff !important;
 }
 
-td {
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+  border-bottom: 1px solid lightgray;
   vertical-align: top;
+  padding: 5px;
+}
+
+tr {
+  font-size: 85%;
 }
 
 th.registered th.severity th.msg {

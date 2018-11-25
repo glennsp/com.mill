@@ -8,7 +8,7 @@ class MillDevice extends Homey.Device {
   onInit() {
     this.deviceId = this.getData().id;
 
-    debug(`${this.getName()} ${this.getClass()} (${this.deviceId}) initialized`);
+    debug(`[${this.getName()}] ${this.getClass()} (${this.deviceId}) initialized`);
 
     // capabilities
     this.registerCapabilityListener('target_temperature', this.onCapabilityTargetTemperature.bind(this));
@@ -46,7 +46,7 @@ class MillDevice extends Homey.Device {
   }
 
   async refreshState() {
-    debug(`Refreshing state in ${this.getName()}`);
+    debug(`[${this.getName()}] Refreshing state`);
 
     if (this.refreshTimeout) {
       clearTimeout(this.refreshTimeout);
@@ -55,39 +55,14 @@ class MillDevice extends Homey.Device {
 
     try {
       if (Homey.app.isConnected()) {
-        // throw new Error("Forced error");
-        const millApi = Homey.app.getMillApi();
-
-        millApi.listDevices(this.getData().id)
-          .then((room) => {
-            debug(`Refreshing state for ${room.roomName}`, room);
-
-            if (this.room && !this.room.modesMatch(room)) {
-              debug(`Triggering mode change from ${this.room.modeName} to ${room.modeName}`);
-              // not needed, setCapabilityValue will trigger
-              // this.modeChangedTrigger.trigger(this, { mill_mode: 'x'+room.modeName })
-              //   .catch(this.error);
-              this.modeChangedToTrigger.trigger(this, null, { mill_mode: room.modeName })
-                .catch(this.error);
-            }
-
-            this.room = new Room(room);
-            Promise.all([
-              this.setCapabilityValue('measure_temperature', room.avgTemp),
-              this.setCapabilityValue('target_temperature', room.targetTemp),
-              this.setCapabilityValue('mill_mode', room.modeName),
-              this.setCapabilityValue('mill_onoff', room.isHeating)
-            ]).then(() => {
-              this.scheduleRefresh();
-            }).catch((error) => {
-              Log.captureException(error);
-            });
-          }).catch((err) => {
-            error(err);
-          });
+        await this.refreshMillService();
       } else {
-        debug('Mill not connected');
-        this.scheduleRefresh(10);
+        debug(`[${this.getName()}] Mill not connected`);
+        await Homey.app.connectToMill().then(() => {
+          this.scheduleRefresh(10);
+        }).catch((err) => {
+          error('Error caught while refreshing state', err);
+        });
       }
     } catch (e) {
       Log.captureException(e);
@@ -101,7 +76,47 @@ class MillDevice extends Homey.Device {
   scheduleRefresh(interval) {
     const refreshInterval = interval || Homey.ManagerSettings.get('interval');
     this.refreshTimeout = setTimeout(this.refreshState.bind(this), refreshInterval * 1000);
-    debug(`Next refresh in ${this.getName()} in ${refreshInterval} seconds`);
+    debug(`[${this.getName()}] Next refresh in ${refreshInterval} seconds`);
+  }
+
+  async refreshMillService() {
+    const millApi = Homey.app.getMillApi();
+
+    return millApi.listDevices(this.getData().id)
+      .then((room) => {
+        debug(`[${this.getName()}] Mill state refreshed`, {
+          comfortTemp: room.comfortTemp,
+          programMode: room.programMode,
+          awayTemp: room.awayTemp,
+          holidayTemp: room.holidayTemp,
+          sleepTemp: room.sleepTemp,
+          avgTemp: room.avgTemp,
+          currentMode: room.currentMode,
+          programMode: room.programMode,
+          heatStatus: room.heatStatus
+        });
+
+        if (this.room && !this.room.modesMatch(room)) {
+          debug(`[${this.getName()}] Triggering mode change from ${this.room.modeName} to ${room.modeName}`);
+          // not needed, setCapabilityValue will trigger
+          // this.modeChangedTrigger.trigger(this, { mill_mode: room.modeName })
+          //   .catch(this.error);
+          this.modeChangedToTrigger.trigger(this, null, { mill_mode: room.modeName })
+            .catch(this.error);
+        }
+
+        this.room = new Room(room);
+        return Promise.all([
+          this.setCapabilityValue('measure_temperature', room.avgTemp),
+          this.setCapabilityValue('target_temperature', room.targetTemp),
+          this.setCapabilityValue('mill_mode', room.modeName),
+          this.setCapabilityValue('mill_onoff', room.isHeating)
+        ]).catch((err) => {
+          Log.captureException(err);
+        });
+      }).catch((err) => {
+        error(`[${this.getName()}] Error caught while refreshing state`, err);
+      });
   }
 
   onAdded() {

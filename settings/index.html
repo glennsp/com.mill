@@ -79,7 +79,7 @@
 
     function disableLogging(Homey) {
       Homey.api('POST', '/clearLog');
-      _$('.logentry').each(function(i) { i.remove(); });
+      _$('.event').each(function(i) { i.remove(); });
     }
 
     function addLogEntry(registered, severity, message, data) {
@@ -93,7 +93,7 @@
           _EE('code', JSON.stringify(data, ' ', 1))
         ];
       }
-      var html = _EE('tr', {'@class': 'logentry'}, [
+      var html = _EE('tr', {'@class': 'event'}, [
         _EE('td', registered),
         _EE('td', severity),
         _EE('td', msg)

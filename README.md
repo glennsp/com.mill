@@ -24,6 +24,14 @@ Supported actions:
 
 Open Settings and enter you Mill credentials before trying to add any Mill heaters.
 
+### Usage
+
+The Mill service has three modes, _Comfort_, _Sleep_ and _Away_. (There's also a _Holiday_ mode exposed in the API, but not supported in the Mill UI yet).
+
+When you change the mode, the temperature will change to that mode's temperature set point. Adjusting the temperature changes the set point for that mode.
+
+If you select the mode _Program_, the Mill service will take control and adjust the mode during the day according to the program you set up on the Mill app. The device will then change to the current thermostat mode.
+
 ### Supported Languages:
 
 * English

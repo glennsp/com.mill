@@ -9,22 +9,25 @@ class MillApp extends Homey.App {
     this.millApi = new Mill();
     this.user = null;
     this.isAuthenticated = false;
-    const username = Homey.ManagerSettings.get('username');
-    const password = Homey.ManagerSettings.get('password');
-
-    if (username && password) {
-      this.authenticate(username, password)
-        .catch((e) => {
-          error(`error while authenticating: ${e}`);
-        });
-    }
+    this.isAuthenticating = false;
 
     debug(`${Homey.manifest.id} is running..`);
   }
 
-  async authenticate(username, password) {
-    this.user = await this.millApi.login(username, password) || null;
-    this.isAuthenticated = true;
+  async connectToMill() {
+    const username = Homey.ManagerSettings.get('username');
+    const password = Homey.ManagerSettings.get('password');
+
+    if (username && password && !this.isAuthenticating) {
+      try {
+        this.isAuthenticating = true;
+        this.user = await this.millApi.login(username, password) || null;
+        this.isAuthenticated = true;
+        debug('Mill authenticated');
+      } finally {
+        this.isAuthenticating = false;
+      }
+    }
   }
 
   clear() {
