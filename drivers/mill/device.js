@@ -65,6 +65,7 @@ class MillDevice extends Homey.Device {
         });
       }
     } catch (e) {
+      error('Exception caught', e);
       Log.captureException(e);
     } finally {
       if (this.refreshTimeout === null) {
