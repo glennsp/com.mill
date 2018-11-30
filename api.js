@@ -1,4 +1,4 @@
-/* eslint import/no-unresolved: 2 */
+// eslint-disable-next-line import/no-unresolved
 const Homey = require('homey');
 
 module.exports = [
