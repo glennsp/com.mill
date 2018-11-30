@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
 const Homey = require('homey');
-const { Log } = require('homey-log');
 const Mill = require('./lib/mill');
 const { debug } = require('./lib/util');
 
