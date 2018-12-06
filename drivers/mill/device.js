@@ -27,7 +27,7 @@ class MillDevice extends Homey.Device {
     this.isHeatingCondition = new Homey.FlowCardCondition('mill_is_heating');
     this.isHeatingCondition
       .register()
-      .registerRunListener(() => (this.room.heatStatus === 1));
+      .registerRunListener(() => (this.room && this.room.heatStatus === 1));
 
     this.isMatchingModeCondition = new Homey.FlowCardCondition('mill_mode_matching');
     this.isMatchingModeCondition
