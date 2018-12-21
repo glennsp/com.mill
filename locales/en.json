@@ -11,8 +11,9 @@
   },
   "settings": {
     "title": "Mill settings",
-    "intro": "Before you can add any heaters you need to enter your Mill credentials. The credentials are only stored locally on your Homey.",
     "account": {
+      "title": "Account",
+      "intro": "Before you can add any heaters you need to enter your Mill credentials. The credentials are only stored locally on your Homey.",
       "credentials": "Mill credentials",
       "fieldUsername": "Username",
       "fieldPassword": "Password",
@@ -26,6 +27,13 @@
         "errorClearing": "Unfortunately, we encountered an error while clearing account settings:\r\n\r\n__error__",
         "successClearing": "Account settings cleared successfully"
       }
+    },
+    "debug": {
+      "title": "Debug",
+      "enableDebugLogging": "Enable debug logging",
+      "registered": "Registered",
+      "severity": "Severity",
+      "message": "Message"
     }
   }
 }

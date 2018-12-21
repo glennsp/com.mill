@@ -1,6 +1,6 @@
 {
   "id": "com.mill",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "compatibility": ">=1.5.0",
   "sdk": 2,
   "name": {
@@ -16,6 +16,7 @@
     "name": "Glenn S. Pedersen",
     "email": "glenn.pedersen@gmail.com"
   },
+  "homeyCommunityTopicId": 3851,
   "contributing": {
     "donate": {
       "paypal": {}
@@ -286,6 +287,10 @@
         "mill_onoff",
         "mill_mode"
       ],
+      "images": {
+        "large": "/drivers/mill/assets/images/large.png",
+        "small": "/drivers/mill/assets/images/small.png"
+      },
       "pair":[
         {
           "id":"list_devices",

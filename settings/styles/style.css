@@ -1,0 +1,37 @@
+.panel-button {
+  border: none !important;
+  border-top: 1px solid #ccc !important;
+  border-left: 1px solid #ccc !important;
+  border-right: 1px solid #ccc !important;
+}
+.panel-button-active {
+  background: #fff !important;
+}
+.panel-button-inactive {
+  border-bottom:  1px solid #fff !important;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+  border-bottom: 1px solid lightgray;
+  vertical-align: top;
+  padding: 5px;
+}
+
+tr {
+  font-size: 85%;
+}
+
+th.registered th.severity th.msg {
+  text-transform: uppercase;
+}
+
+th.registered {
+  width: 15%;
+}
+th.severity {
+  width: 10%;
+}

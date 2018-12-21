@@ -1,9 +1,10 @@
 {
   "name": "com.mill",
-  "version": "0.0.1",
+  "version": "1.0.3",
   "description": "Homey app for WiFi heating devices from Mill",
   "main": "app.js",
   "dependencies": {
+    "homey-log": "1.0.6",
     "node-fetch": "2.2.0"
   },
   "devDependencies": {
@@ -13,7 +14,8 @@
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.14.0",
     "mocha": "5.2.0",
-    "nock": "10.0.1"
+    "nock": "10.0.1",
+    "proxyquire": "2.1.0"
   },
   "scripts": {
     "deploy": "rm -fr node_modules; npm install --production; athom app install",

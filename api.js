@@ -1,4 +1,4 @@
-/* eslint import/no-unresolved: 2 */
+// eslint-disable-next-line import/no-unresolved
 const Homey = require('homey');
 
 module.exports = [
@@ -19,6 +19,14 @@ module.exports = [
     path: '/clearSettings',
     fn: async (args, callback) => {
       Homey.app.clear();
+      return callback(null, {});
+    }
+  },
+  {
+    method: 'POST',
+    path: '/clearLog',
+    fn: async (args, callback) => {
+      Homey.ManagerSettings.set('debugLog', []);
       return callback(null, {});
     }
   }

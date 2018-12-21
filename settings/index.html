@@ -2,110 +2,218 @@
 <html>
 <head>
 	<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+  <script type="text/javascript" src="scripts/minified.js"></script>
+  <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-  <h1 data-i18n="settings.title" ></h1>
-	<p data-i18n="settings.intro"></p>
-	<fieldset>
-		<legend data-i18n="settings.account.credentials"></legend>
-		<div class="field row">
-				<label for="username" data-i18n="settings.account.fieldUsername"></label>
-				<input id="username" type="text" value="" />
-		</div>
-		<div class="field row">
-			<label for="password" data-i18n="settings.account.fieldPassword"></label>
-			<input id="password" type="password" value="" />
-		</div>
-		<button id="clear" class="left"><i class="fa fa-trash-o"></i> <span data-i18n="settings.account.buttonClear">/<span></button>
-	</fieldset>
-  <fieldset>
-	  <legend data-i18n="settings.account.settings"></legend>
-	  <div class="field row">
-		  <label for="interval" data-i18n="settings.account.fieldPolling"></label>
-		  <input id="interval" type="number" value="60" min="60" max="3600" />
-	  </div>
-  </fieldset>
-	<button id="save" class="right"><i class="fa fa-save"></i> <span data-i18n="settings.account.buttonSave"></span></button>
+  <h1 data-i18n="settings.title"></h1>
+
+  <div>
+    <button id="account-panel-bt" class="button panel-button panel-button-active" data-i18n="settings.account.title"></button>&nbsp;
+    <button id="debug-panel-bt" class="button panel-button panel-button-inactive" data-i18n="settings.debug.title"></button>&nbsp;
+  </div>
+
+  <div id="account-panel" class="panel">
+    <fieldset>
+    	<p data-i18n="settings.account.intro"></p>
+    	<fieldset>
+    		<legend data-i18n="settings.account.credentials"></legend>
+    		<div class="field row">
+    				<label for="username" data-i18n="settings.account.fieldUsername"></label>
+    				<input id="username" type="text" value="" />
+    		</div>
+    		<div class="field row">
+    			<label for="password" data-i18n="settings.account.fieldPassword"></label>
+    			<input id="password" type="password" value="" />
+    		</div>
+    		<button id="clear-bt" class="left"><i class="fa fa-trash-o"></i> <span data-i18n="settings.account.buttonClear">/<span></button>
+    	</fieldset>
+      <fieldset>
+    	  <legend data-i18n="settings.account.settings"></legend>
+    	  <div class="field row">
+    		  <label for="interval" data-i18n="settings.account.fieldPolling"></label>
+    		  <input id="interval" type="number" value="300" min="60" max="3600" />
+    	  </div>
+      </fieldset>
+    	<button id="save-bt" class="right"><i class="fa fa-save"></i> <span data-i18n="settings.account.buttonSave"></span></button>
+    </fieldset>
+  </div>
+
+  <div id="debug-panel" class="panel">
+    <fieldset>
+      <div>
+        <input id="debug-logging" type="checkbox" value="debug"/>
+        <label for="debug-logging" data-i18n="settings.debug.enableDebugLogging"></label>
+      </div>
+
+      <div id="log-table">
+        <fieldset>
+          <table id="logs" width=100%>
+            <tr>
+              <th class="registered" data-i18n="settings.debug.registered"></th>
+              <th class="severity" data-i18n="settings.debug.severity"></th>
+              <th class="msg" data-i18n="settings.debug.message"></th>
+            </tr>
+          </table>
+        </fieldset>
+      </div>
+    </fieldset>
+  </div>
 
 	<script type="text/javascript">
+    var MINI = require('minified');
+    var _$=MINI.$, _EE=MINI.EE;
 
-	function onHomeyReady(Homey) {
-        var usernameElement = document.getElementById('username');
-        var passwordElement = document.getElementById('password');
-        var intervalElement = document.getElementById('interval');
-        var saveElement = document.getElementById('save');
-				var clearElement = document.getElementById('clear');
+    function enableLogging(Homey) {
+      Homey.get('debugLog', function (error, value) {
+        if (error) {
+          return console.error(error);
+        }
+        if (value != null) {
+          value.forEach(function (item) {
+            addLogEntry(item.registered, item.severity, item.message, item.data);
+          });
+        }
+      });
+    }
 
-        Homey.get('username', function (err, name) {
+    function disableLogging(Homey) {
+      Homey.api('POST', '/clearLog');
+      _$('.event').each(function(i) { i.remove(); });
+    }
+
+    function addLogEntry(registered, severity, message, data) {
+      var msg;
+      if (data == null) {
+        msg = _EE('b', message);
+      } else {
+        msg = [
+          _EE('b', message),
+          _EE('br'),
+          _EE('code', JSON.stringify(data, ' ', 1))
+        ];
+      }
+      var html = _EE('tr', {'@class': 'event'}, [
+        _EE('td', registered),
+        _EE('td', severity),
+        _EE('td', msg)
+      ]);
+      _$('#logs').add(html);
+    }
+
+  	function onHomeyReady(Homey) {
+      _$('#debug-panel').hide();
+
+      _$('#account-panel-bt').onClick(function (e) {
+        _$('#account-panel-bt').set('-panel-button-inactive +panel-button-active');
+        _$('#debug-panel-bt').set('-panel-button-active +panel-button-inactive');
+        _$('#account-panel').show();
+        _$('#debug-panel').hide();
+      });
+
+      _$('#debug-panel-bt').onClick(function (e) {
+        _$('#debug-panel-bt').set('-panel-button-inactive +panel-button-active');
+        _$('#account-panel-bt').set('-panel-button-active +panel-button-inactive');
+        _$('#debug-panel').show();
+        _$('#account-panel').hide();
+      });
+
+      // account
+      Homey.get('username', function (err, value) {
+        if (err) return Homey.alert(err);
+        _$('#username').set({ value });
+      });
+
+      Homey.get('password', function (err, value) {
+        if (err) return Homey.alert(err);
+        _$('#password').set({ value });
+      });
+
+      Homey.get('interval', function (err, value) {
+        if (err) return Homey.alert(err);
+        _$('#interval').set({ value });
+      });
+
+      _$('#clear-bt').onClick(function (e) {
+    		Homey.api('POST', '/clearSettings', {}, function (err, result) {
+    			if (err) {
+    				return Homey.alert(
+    					Homey.__('settings.account.messages.errorClearing', {error: err})
+    				);
+    			}
+
+    			Homey.set('username', '', function (err) {
+  					if (err) return Homey.alert(err);
+            _$('#username').set({ value: '' });
+    			});
+
+  				Homey.set('password', '', function (err) {
+  					if (err) return Homey.alert(err);
+            _$('#password').set({ value: '' });
+  				});
+
+  				Homey.alert(
+  					Homey.__('settings.account.messages.successClearing')
+  				);
+      	});
+      });
+
+      _$('#save-bt').onClick(function (e) {
+        Homey.set('interval', _$('#interval').get('value') || 300, function (err) {
+          if (err) return Homey.alert(err);
+        });
+
+        Homey.api('POST', '/authenticate', {
+          'username': _$('#username').get('value'),
+          'password': _$('#password').get('value')
+        }, function (err, result) {
+          if (err) {
+    				return Homey.alert(
+    					Homey.__('settings.account.messages.errorSaving', {error: err})
+    				);
+    			}
+
+          Homey.set('username', _$('#username').get('value'), function (err) {
             if (err) return Homey.alert(err);
-            usernameElement.value = name;
-        });
+          });
 
-        Homey.get('password', function (err, password) {
+          Homey.set('password', _$('#password').get('value'), function (err) {
             if (err) return Homey.alert(err);
-            passwordElement.value = password;
+          });
+
+          Homey.alert(
+  					Homey.__('settings.account.messages.successSaving')
+  				);
         });
+      });
 
-        Homey.get('interval', function (err, interval) {
-            if (err) return Homey.alert(err);
-            intervalElement.value = interval;
+      // debug
+      Homey.get('debug', function (err, checked) {
+        if (err) return Homey.alert(err);
+        _$('#debug-logging').set('checked', checked);
+        if (checked) {
+          enableLogging(Homey);
+        }
+      });
+
+      Homey.on('debugLog', function (item) {
+        addLogEntry(item.registered, item.severity, item.message, item.data);
+      });
+
+      _$('#debug-logging').onClick(function (e) {
+        var checked = _$('#debug-logging').get('checked') || false;
+        Homey.set('debug', checked, function (err) {
+          if (err) return Homey.alert(err);
+          _$('#debug-logging').set('checked', checked);
+          if (checked) {
+            enableLogging(Homey);
+          } else {
+            disableLogging(Homey);
+          }
         });
+      });
 
-				clearElement.addEventListener('click', function (e) {
-					Homey.api('POST', '/clearSettings', {},
-						function (err, result) {
-							if (err) {
-								return Homey.alert(
-									Homey.__('settings.account.messages.errorClearing', {error: err})
-								);
-							}
-
-							Homey.set('username', '', function (err) {
-									if (err) return Homey.alert(err);
-									usernameElement.value = '';
-							});
-
-							Homey.set('password', '', function (err) {
-									if (err) return Homey.alert(err);
-									passwordElement.value = '';
-							});
-
-						Homey.alert(
-							Homey.__('settings.account.messages.successClearing')
-						);
-					});
-				});
-
-        saveElement.addEventListener('click', function (e) {
-            Homey.set('interval', intervalElement.value || 60, function (err) {
-                if (err) return Homey.alert(err);
-            });
-
-            Homey.api('POST', '/authenticate', {
-                'username': usernameElement.value,
-                'password': passwordElement.value
-            }, function (err, result) {
-                if (err) {
-									return Homey.alert(
-										Homey.__('settings.account.messages.errorSaving', {error: err})
-									);
-								}
-
-                Homey.set('username', usernameElement.value, function (err) {
-                    if (err) return Homey.alert(err);
-                });
-
-                Homey.set('password', passwordElement.value, function (err) {
-                    if (err) return Homey.alert(err);
-                });
-
-                Homey.alert(
-									Homey.__('settings.account.messages.successSaving')
-								);
-            });
-        });
-
-        Homey.ready();
+      Homey.ready();
     }
 	</script>
  </body>

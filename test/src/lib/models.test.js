@@ -98,6 +98,17 @@ describe('room', () => {
       expect(room.modeName).to.be.equal('Comfort');
       expect(room.mode).to.be.equal(1);
     });
+
+    it('should handle comparing modes', () => {
+      const room = new Room({ currentMode: 0, programMode: 1 });
+      const sameMode = new Room({ currentMode: 0, programMode: 1 });
+      const otherProgramMode = new Room({ currentMode: 0, programMode: 2 });
+      const forcedMode = new Room({ currentMode: 1, programMode: 1 });
+
+      expect(room.modesMatch(sameMode)).to.be.true;
+      expect(room.modesMatch(otherProgramMode)).to.be.false;
+      expect(room.modesMatch(forcedMode)).to.be.false;
+    });
   });
 
   describe('targetTemp', () => {

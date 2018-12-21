@@ -3,12 +3,9 @@ const Homey = require('homey');
 
 class MillDriver extends Homey.Driver {
   async onInit() {
-    this.log('onInit()');
   }
 
   async onPairListDevices(data, callback) {
-    this.log('onPairListDevices()');
-
     if (!Homey.app.isConnected()) {
       // eslint-disable-next-line no-underscore-dangle
       callback(new Error(Homey.__('pair.messages.notAuthorized')));
