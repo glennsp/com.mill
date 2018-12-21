@@ -46,10 +46,13 @@ Use this app at your own risk. The app has been developed with the same APIs and
 
 ### Change Log:
 
-#### v0.0.2
+##### v1.0.0
+* Added logging interface
+
+##### v0.0.2
 * Added Sentry logging
-*
-#### v0.0.1
+
+##### v0.0.1
 * First version
 
 ### Credits
