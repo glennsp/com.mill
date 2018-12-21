@@ -111,7 +111,9 @@ class MillDevice extends Homey.Device {
           this.setCapabilityValue('measure_temperature', room.avgTemp),
           this.setCapabilityValue('target_temperature', room.targetTemp),
           this.setCapabilityValue('mill_mode', room.modeName),
-          this.setCapabilityValue('mill_onoff', room.isHeating)
+          this.setCapabilityValue('mill_onoff', room.isHeating),
+          this.setCapabilityValue('onoff', room.isHeating),
+          this.setCapabilityValue('thermostat_mode', room.isHeating ? 'heat' : 'off')
         ]).catch((err) => {
           Log.captureException(err);
         });
