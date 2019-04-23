@@ -109,12 +109,15 @@ class MillDevice extends Homey.Device {
         }
 
         this.room = new Room(room);
-        return Promise.all([
+        const jobs = [
           this.setCapabilityValue('measure_temperature', room.avgTemp),
-          this.setCapabilityValue('target_temperature', room.targetTemp),
           this.setCapabilityValue('mill_mode', room.modeName),
           this.setCapabilityValue('mill_onoff', room.isHeating)
-        ]).catch((err) => {
+        ];
+        if (room.modeName !== 'Off') {
+          jobs.push(this.setCapabilityValue('target_temperature', room.targetTemp));
+        }
+        return Promise.all(jobs).catch((err) => {
           Log.captureException(err);
         });
       }).catch((err) => {
@@ -133,7 +136,7 @@ class MillDevice extends Homey.Device {
   onCapabilityTargetTemperature(value, opts, callback) {
     debug(`onCapabilityTargetTemperature(${value})`);
     const temp = Math.ceil(value);
-    if (temp !== value) { // half degrees isn't supported by Mill, need to round it up
+    if (temp !== value && this.room.modeName !== 'Off') { // half degrees isn't supported by Mill, need to round it up
       this.setCapabilityValue('target_temperature', temp);
       debug(`onCapabilityTargetTemperature(${value}=>${temp})`);
     }
@@ -155,14 +158,17 @@ class MillDevice extends Homey.Device {
     return new Promise((resolve, reject) => {
       const millApi = Homey.app.getMillApi();
       this.room.modeName = value;
-      Promise.all([
-        this.setCapabilityValue('target_temperature', this.room.targetTemp),
-        millApi.changeRoomMode(this.deviceId, this.room.currentMode)
-      ]).then(() => {
+      const jobs = [];
+      if (this.room.modeName !== 'Off') {
+        jobs.push(this.setCapabilityValue('target_temperature', this.room.targetTemp));
+      }
+      jobs.push(millApi.changeRoomMode(this.deviceId, this.room.currentMode));
+
+      Promise.all(jobs).then(() => {
         debug(`[${this.getName()}] Changed mode to ${value}: currentMode: ${this.room.currentMode}/${this.room.programMode}, comfortTemp: ${this.room.comfortTemp}, awayTemp: ${this.room.awayTemp}, avgTemp: ${this.room.avgTemp}, sleepTemp: ${this.room.sleepTemp}`);
         resolve(value);
       }).catch((err) => {
-        debug(`[${this.getName()}] Change mode to ${value} resulted in error`, err);
+        error(`[${this.getName()}] Change mode to ${value} resulted in error`, err);
         reject(err);
       });
     });
