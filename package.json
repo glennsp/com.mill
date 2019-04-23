@@ -1,6 +1,6 @@
 {
   "name": "com.mill",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Homey app for WiFi heating devices from Mill",
   "main": "app.js",
   "dependencies": {
