@@ -32,62 +32,62 @@
   },
   "capabilities": {
     "mill_onoff": {
-			"type": "boolean",
-			"title": {
-				"en": "State"
-			},
-			"desc": {
-				"en": "State of the thermostat"
-			},
-			"getable": true,
-			"setable": false,
-			"greyout": true
-		},
+      "type": "boolean",
+      "title": {
+        "en": "State"
+      },
+      "desc": {
+        "en": "State of the thermostat"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true
+    },
     "mill_mode": {
-			"type": "enum",
-			"title": {
-				"en": "Thermostat mode",
-				"nl": "Thermostaat modus"
-			},
-			"desc": {
-				"en": "Mode of the thermostat",
-				"nl": "Modus van de thermostaat"
-			},
-			"values": [
+      "type": "enum",
+      "title": {
+        "en": "Thermostat mode",
+        "nl": "Thermostaat modus"
+      },
+      "desc": {
+        "en": "Mode of the thermostat",
+        "nl": "Modus van de thermostaat"
+      },
+      "values": [
         {
-					"id": "Program",
-					"title": {
-						"en": "Program"
-					}
-				},
-				{
-					"id": "Comfort",
-					"title": {
-						"en": "Comfort"
-					}
-				},
-				{
-					"id": "Sleep",
-					"title": {
-						"en": "Sleep"
-					}
-				},
-				{
-					"id": "Away",
-					"title": {
-						"en": "Away"
-					}
-				},
-				{
-					"id": "Off",
-					"title": {
-						"en": "Off"
-					}
-				}
-			],
-			"getable": true,
-			"setable": true
-		}
+          "id": "Program",
+          "title": {
+            "en": "Program"
+          }
+        },
+        {
+          "id": "Comfort",
+          "title": {
+            "en": "Comfort"
+          }
+        },
+        {
+          "id": "Sleep",
+          "title": {
+            "en": "Sleep"
+          }
+        },
+        {
+          "id": "Away",
+          "title": {
+            "en": "Away"
+          }
+        },
+        {
+          "id": "Off",
+          "title": {
+            "en": "Off"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": true
+    }
   },
   "flow": {
     "triggers": [
@@ -97,12 +97,12 @@
               "en": "Thermostat mode has changed"
           },
           "args": [
-  					{
-  						"name": "device",
-  						"type": "device",
-  						"filter": "driver_id=mill"
-  					}
-  				],
+            {
+              "name": "device",
+              "type": "device",
+              "filter": "driver_id=mill"
+            }
+          ],
           "tokens": [
             {
               "name": "mill_mode",
@@ -124,37 +124,37 @@
               "type": "dropdown",
               "name": "mill_mode",
               "values": [
-        				{
-        					"id": "Comfort",
-        					"label": {
-        						"en": "Comfort"
-        					}
-        				},
-        				{
-        					"id": "Sleep",
-        					"label": {
-        						"en": "Sleep"
-        					}
-        				},
-        				{
-        					"id": "Away",
-        					"label": {
-        						"en": "Away"
-        					}
-        				},
-        				{
-        					"id": "Off",
-        					"label": {
-        						"en": "Off"
-        					}
-        				}
+                {
+                  "id": "Comfort",
+                  "label": {
+                    "en": "Comfort"
+                  }
+                },
+                {
+                  "id": "Sleep",
+                  "label": {
+                    "en": "Sleep"
+                  }
+                },
+                {
+                  "id": "Away",
+                  "label": {
+                    "en": "Away"
+                  }
+                },
+                {
+                  "id": "Off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
               ]
             },
-  					{
-  						"name": "device",
-  						"type": "device",
-  						"filter": "driver_id=mill"
-  					}
+            {
+              "name": "device",
+              "type": "device",
+              "filter": "driver_id=mill"
+            }
           ]
       }
     ],
@@ -165,12 +165,12 @@
               "en": "!{{Is|Isn't}} heating"
           },
           "args": [
-  					{
-  						"name": "device",
-  						"type": "device",
-  						"filter": "driver_id=mill"
-  					}
-  				]
+            {
+              "name": "device",
+              "type": "device",
+              "filter": "driver_id=mill"
+            }
+          ]
       },
       {
           "id": "mill_mode_matching",
@@ -183,43 +183,43 @@
               "name": "mill_mode",
               "values": [
                 {
-        					"id": "Program",
-        					"label": {
-        						"en": "Program"
-        					}
-        				},
-        				{
-        					"id": "Comfort",
-        					"label": {
-        						"en": "Comfort"
-        					}
-        				},
-        				{
-        					"id": "Sleep",
-        					"label": {
-        						"en": "Sleep"
-        					}
-        				},
-        				{
-        					"id": "Away",
-        					"label": {
-        						"en": "Away"
-        					}
-        				},
-        				{
-        					"id": "Off",
-        					"label": {
-        						"en": "Off"
-        					}
-        				}
+                  "id": "Program",
+                  "label": {
+                    "en": "Program"
+                  }
+                },
+                {
+                  "id": "Comfort",
+                  "label": {
+                    "en": "Comfort"
+                  }
+                },
+                {
+                  "id": "Sleep",
+                  "label": {
+                    "en": "Sleep"
+                  }
+                },
+                {
+                  "id": "Away",
+                  "label": {
+                    "en": "Away"
+                  }
+                },
+                {
+                  "id": "Off",
+                  "label": {
+                    "en": "Off"
+                  }
+                }
               ]
             },
-  					{
-  						"name": "device",
-  						"type": "device",
-  						"filter": "driver_id=mill"
-  					}
-  				]
+            {
+              "name": "device",
+              "type": "device",
+              "filter": "driver_id=mill"
+            }
+          ]
       }
     ],
     "actions": [
@@ -239,35 +239,35 @@
             "name": "mill_mode",
             "values": [
               {
-      					"id": "Program",
-      					"label": {
-      						"en": "Program"
-      					}
-      				},
-      				{
-      					"id": "Comfort",
-      					"label": {
-      						"en": "Comfort"
-      					}
-      				},
-      				{
-      					"id": "Sleep",
-      					"label": {
-      						"en": "Sleep"
-      					}
-      				},
-      				{
-      					"id": "Away",
-      					"label": {
-      						"en": "Away"
-      					}
-      				},
-      				{
-      					"id": "Off",
-      					"label": {
-      						"en": "Off"
-      					}
-      				}
+                "id": "Program",
+                "label": {
+                  "en": "Program"
+                }
+              },
+              {
+                "id": "Comfort",
+                "label": {
+                  "en": "Comfort"
+                }
+              },
+              {
+                "id": "Sleep",
+                "label": {
+                  "en": "Sleep"
+                }
+              },
+              {
+                "id": "Away",
+                "label": {
+                  "en": "Away"
+                }
+              },
+              {
+                "id": "Off",
+                "label": {
+                  "en": "Off"
+                }
+              }
             ]
           }
         ]
@@ -305,49 +305,49 @@
         }
       ],
       "mobile": {
-  			"components": [
-  				{
-  					"id": "icon",
-  					"capabilities": []
-  				},
-  				{
-  					"id": "sensor",
-  					"capabilities": [
-  						"measure_temperature",
-  						"mill_onoff"
-  					],
-  					"options": {
-  						"icons": {
-  							"mill_onoff": "/drivers/mill/assets/mill_onoff.svg"
-  						},
-  						"mill_onoff": {
-  							"noblink": false,
-  							"greyout": true,
-  							"label": {
-  								"true": {
-  									"en": "Active"
-  								},
-  								"false": {
-  									"en": "Idle"
-  								}
-  							}
-  						}
-  					}
-  				},
-  				{
-  					"id": "picker",
-  					"capabilities": [
-  						"mill_mode"
-  					]
-  				},
-  				{
-  					"id": "thermostat",
-  					"capabilities": [
-  						"target_temperature"
-  					]
-  				}
-  			]
-  		}
+        "components": [
+          {
+            "id": "icon",
+            "capabilities": []
+          },
+          {
+            "id": "sensor",
+            "capabilities": [
+              "measure_temperature",
+              "mill_onoff"
+            ],
+            "options": {
+              "icons": {
+                "mill_onoff": "/drivers/mill/assets/mill_onoff.svg"
+              },
+              "mill_onoff": {
+                "noblink": false,
+                "greyout": true,
+                "label": {
+                  "true": {
+                    "en": "Active"
+                  },
+                  "false": {
+                    "en": "Idle"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "picker",
+            "capabilities": [
+              "mill_mode"
+            ]
+          },
+          {
+            "id": "thermostat",
+            "capabilities": [
+              "target_temperature"
+            ]
+          }
+        ]
+      }
     }
   ]
 }
