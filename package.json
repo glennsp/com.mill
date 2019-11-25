@@ -1,7 +1,7 @@
 {
   "name": "com.mill",
-  "version": "1.0.4",
-  "description": "Homey app for WiFi heating devices from Mill",
+  "version": "1.0.5",
+  "description": "Integrate Mill WiFi heating devices with Homey",
   "main": "app.js",
   "dependencies": {
     "homey-log": "1.0.6",

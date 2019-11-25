@@ -51,6 +51,9 @@ Use this app at your own risk. The app has been developed with the same APIs and
 
 ### Change Log:
 
+##### v1.0.5
+* Support for new app store
+
 ##### v1.0.4
 * Changed Mill endpoint
 * Fixed problems where heaters couldn't be reinstalled after being deleted

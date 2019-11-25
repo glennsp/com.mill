@@ -1,16 +1,16 @@
 {
   "id": "com.mill",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "compatibility": ">=1.5.0",
   "sdk": 2,
   "name": {
-    "en": "Mill"
+    "en": "Mill WiFi"
   },
   "tags": {
     "en": [ "mill", "heating" ]
   },
   "description": {
-    "en": "Support for Mill Wifi heating"
+    "en": "Integrate Mill WiFi heating devices with Homey"
   },
   "author": {
     "name": "Glenn S. Pedersen",
