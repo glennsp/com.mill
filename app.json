@@ -1,6 +1,6 @@
 {
   "id": "com.mill",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "compatibility": ">=1.5.0",
   "sdk": 2,
   "name": {
@@ -10,11 +10,19 @@
     "en": [ "mill", "heating" ]
   },
   "description": {
-    "en": "Integrate Mill WiFi heating devices with Homey"
+    "en": "Integrate Mill WiFi heating devices with Homey",
+    "nl": "Gebruik Mill WiFi verwarming met Homey"
   },
   "author": {
     "name": "Glenn S. Pedersen",
     "email": "glenn.pedersen@gmail.com"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Ramón Baas"
+      }
+    ]
   },
   "homeyCommunityTopicId": 3851,
   "contributing": {
@@ -34,14 +42,16 @@
     "mill_onoff": {
       "type": "boolean",
       "title": {
-        "en": "State"
+        "en": "Heating",
+        "nl": "Verwarmen"
       },
       "desc": {
-        "en": "State of the thermostat"
+        "en": "State of the thermostat",
+        "nl": "Thermostaat status"
       },
       "getable": true,
       "setable": false,
-      "greyout": true
+      "icon": "/drivers/mill/assets/mill_onoff.svg"
     },
     "mill_mode": {
       "type": "enum",
@@ -57,7 +67,8 @@
         {
           "id": "Program",
           "title": {
-            "en": "Program"
+            "en": "Program",
+            "nl": "Programma"
           }
         },
         {
@@ -69,19 +80,22 @@
         {
           "id": "Sleep",
           "title": {
-            "en": "Sleep"
+            "en": "Sleep",
+            "nl": "Slapen"
           }
         },
         {
           "id": "Away",
           "title": {
-            "en": "Away"
+            "en": "Away",
+            "nl": "Weg"
           }
         },
         {
           "id": "Off",
           "title": {
-            "en": "Off"
+            "en": "Off",
+            "nl": "Uit"
           }
         }
       ],
@@ -94,7 +108,8 @@
       {
         "id": "mill_mode_changed",
         "title": {
-          "en": "Thermostat mode has changed"
+          "en": "Thermostat mode has changed",
+          "nl": "Modus van de thermostaat is gewijzigd"
         },
         "args": [
           {
@@ -108,7 +123,8 @@
             "name": "mill_mode",
             "type": "string",
             "title": {
-              "en": "Mode"
+              "en": "Mode",
+              "nl": "Modus"
             },
             "example": "Comfort"
           }
@@ -117,7 +133,8 @@
       {
         "id": "mill_mode_changed_to",
         "title": {
-          "en": "Thermostat mode has changed to"
+          "en": "Thermostat mode has changed to",
+          "nl": "Thermostaat modus is gewijzigd naar"
         },
         "args": [
           {
@@ -133,19 +150,22 @@
               {
                 "id": "Sleep",
                 "label": {
-                  "en": "Sleep"
+                  "en": "Sleep",
+                  "nl": "Slapen"
                 }
               },
               {
                 "id": "Away",
                 "label": {
-                  "en": "Away"
+                  "en": "Away",
+                  "nl": "Weg"
                 }
               },
               {
                 "id": "Off",
                 "label": {
-                  "en": "Off"
+                  "en": "Off",
+                  "nl": "Uit"
                 }
               }
             ]
@@ -162,7 +182,8 @@
       {
         "id": "mill_is_heating",
         "title": {
-          "en": "!{{Is|Isn't}} heating"
+          "en": "!{{Is|Isn't}} heating",
+          "nl": "Verwarmt !{{|niet}}"
         },
         "args": [
           {
@@ -175,7 +196,8 @@
       {
         "id": "mill_mode_matching",
         "title": {
-          "en": "Thermostat mode !{{is|isn't}}"
+          "en": "Thermostat mode !{{is|isn't}}",
+          "nl": "Thermostaat mode !{{is|is niet}}"
         },
         "args": [
           {
@@ -185,7 +207,8 @@
               {
                 "id": "Program",
                 "label": {
-                  "en": "Program"
+                  "en": "Program",
+                  "nl": "Programma"
                 }
               },
               {
@@ -197,19 +220,22 @@
               {
                 "id": "Sleep",
                 "label": {
-                  "en": "Sleep"
+                  "en": "Sleep",
+                  "nl": "Slapen"
                 }
               },
               {
                 "id": "Away",
                 "label": {
-                  "en": "Away"
+                  "en": "Away",
+                  "nl": "Weg"
                 }
               },
               {
                 "id": "Off",
                 "label": {
-                  "en": "Off"
+                  "en": "Off",
+                  "nl": "Uit"
                 }
               }
             ]
@@ -226,7 +252,8 @@
       {
         "id": "mill_set_mode",
         "title": {
-          "en": "Set thermostat mode"
+          "en": "Set thermostat mode",
+          "nl": "Stel modus in"
         },
         "args": [
           {
@@ -241,7 +268,8 @@
               {
                 "id": "Program",
                 "label": {
-                  "en": "Program"
+                  "en": "Program",
+                  "nl": "Programma"
                 }
               },
               {
@@ -253,19 +281,22 @@
               {
                 "id": "Sleep",
                 "label": {
-                  "en": "Sleep"
+                  "en": "Sleep",
+                  "nl": "Slapen"
                 }
               },
               {
                 "id": "Away",
                 "label": {
-                  "en": "Away"
+                  "en": "Away",
+                  "nl": "Weg"
                 }
               },
               {
                 "id": "Off",
                 "label": {
-                  "en": "Off"
+                  "en": "Off",
+                  "nl": "Uit"
                 }
               }
             ]
@@ -285,8 +316,14 @@
         "measure_temperature",
         "target_temperature",
         "mill_onoff",
-        "mill_mode"
+        "mill_mode",
+        "measure_power"
       ],
+      "capabilitiesOptions": {
+        "measure_power": {
+          "approximated": true
+        }
+      },
       "images": {
         "large": "/drivers/mill/assets/images/large.png",
         "small": "/drivers/mill/assets/images/small.png"
@@ -304,50 +341,29 @@
           "template": "add_devices"
         }
       ],
-      "mobile": {
-        "components": [
-          {
-            "id": "icon",
-            "capabilities": []
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Properties",
+            "nl": "Eigenschappen"
           },
-          {
-            "id": "sensor",
-            "capabilities": [
-              "measure_temperature",
-              "mill_onoff"
-            ],
-            "options": {
-              "icons": {
-                "mill_onoff": "/drivers/mill/assets/mill_onoff.svg"
+          "children": [
+            {
+              "id": "power",
+              "type": "number",
+              "label": {
+                "en": "Power (W)",
+                "nl": "Energie (W)"
               },
-              "mill_onoff": {
-                "noblink": false,
-                "greyout": true,
-                "label": {
-                  "true": {
-                    "en": "Active"
-                  },
-                  "false": {
-                    "en": "Idle"
-                  }
-                }
+              "value": 1200,
+              "hint": {
+                "en": "Max. power in watt that the heater uses when switched on. E.g. for the NE1200WIFI this will be 1200."
               }
             }
-          },
-          {
-            "id": "picker",
-            "capabilities": [
-              "mill_mode"
-            ]
-          },
-          {
-            "id": "thermostat",
-            "capabilities": [
-              "target_temperature"
-            ]
-          }
-        ]
-      }
+          ]
+        }
+      ]
     }
   ]
 }

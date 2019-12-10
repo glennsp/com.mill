@@ -7,6 +7,7 @@ const Room = require('./../../lib/models');
 class MillDevice extends Homey.Device {
   onInit() {
     this.deviceId = this.getData().id;
+    this.power = this.getSettings().power || 1200;
 
     debug(`[${this.getName()}] ${this.getClass()} (${this.deviceId}) initialized`);
 
@@ -112,7 +113,8 @@ class MillDevice extends Homey.Device {
         const jobs = [
           this.setCapabilityValue('measure_temperature', room.avgTemp),
           this.setCapabilityValue('mill_mode', room.modeName),
-          this.setCapabilityValue('mill_onoff', room.isHeating)
+          this.setCapabilityValue('mill_onoff', room.isHeating),
+          this.setCapabilityValue('measure_power', room.isHeating ? this.power : 1.5)
         ];
         if (room.modeName !== 'Off') {
           jobs.push(this.setCapabilityValue('target_temperature', room.targetTemp));
