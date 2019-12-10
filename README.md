@@ -10,6 +10,7 @@ The following devices has been tested by the community and reported working:
 * AV1000LWIFI
 * AV1200WIFI
 * NE600WIFI
+* NE1200WIFI
 
 ### Flow cards
 The module supports all normal thermostat triggers, conditions and actions, but also has a few in addition.
@@ -29,6 +30,10 @@ Supported actions:
 
 Open Settings and enter you Mill credentials before trying to add any Mill heaters.
 
+### Device Settings
+
+In the device settings, enter how much power this heater model uses (e.g. 600, 800, 1200). This will be used to approximate the power usage of the heater when heating.
+
 ### Usage
 
 The Mill service has three modes, _Comfort_, _Sleep_ and _Away_. (There's also a _Holiday_ mode exposed in the API, but not supported in the Mill UI yet).
@@ -37,9 +42,10 @@ When you change the mode, the temperature will change to that mode's temperature
 
 If you select the mode _Program_, the Mill service will take control and adjust the mode during the day according to the program you set up on the Mill app. The device will then change to the current thermostat mode.
 
-### Supported Languages:
+### Supported Languages
 
 * English
+* Dutch
 
 ### Privacy
 

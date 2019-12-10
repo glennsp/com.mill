@@ -16,5 +16,8 @@
   },
   "1.0.5": {
     "en": "Support for new app store"
+  },
+  "1.1.0": {
+    "en": "Support Homey Energy, Dutch language and fix setting program mode"
   }
 }
