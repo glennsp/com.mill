@@ -11,9 +11,18 @@ class MillDevice extends Homey.Device {
 
     debug(`[${this.getName()}] ${this.getClass()} (${this.deviceId}) initialized`);
 
+    // Add new capailities for devices that don't have them yet
+    if (!this.getCapabilities().includes('onoff')) {
+      this.addCapability('onoff').catch(this.error);
+    }
+    if (!this.getCapabilities().includes('measure_power')) {
+      this.addCapability('measure_power').catch(this.error);
+    }
+
     // capabilities
     this.registerCapabilityListener('target_temperature', this.onCapabilityTargetTemperature.bind(this));
     this.registerCapabilityListener('mill_mode', this.onCapabilityThermostatMode.bind(this));
+    this.registerCapabilityListener('onoff', this.onCapabilityOnOff.bind(this));
 
     // triggers
     this.modeChangedTrigger = new Homey.FlowCardTriggerDevice('mill_mode_changed');
@@ -60,8 +69,10 @@ class MillDevice extends Homey.Device {
     try {
       if (Homey.app.isConnected()) {
         await this.refreshMillService();
+        this.setAvailable();
       } else {
         debug(`[${this.getName()}] Mill not connected`);
+        this.setUnavailable();
         await Homey.app.connectToMill().then(() => {
           this.scheduleRefresh(10);
         }).catch((err) => {
@@ -99,29 +110,31 @@ class MillDevice extends Homey.Device {
           programMode: room.programMode,
           heatStatus: room.heatStatus
         });
+        if (room.programMode !== undefined) {
+          if (this.room && !this.room.modesMatch(room) && this.room.modeName !== room.modeName) {
+            debug(`[${this.getName()}] Triggering mode change from ${this.room.modeName} to ${room.modeName}`);
+            // not needed, setCapabilityValue will trigger
+            // this.modeChangedTrigger.trigger(this, { mill_mode: room.modeName })
+            //   .catch(this.error);
+            this.modeChangedToTrigger.trigger(this, null, { mill_mode: room.modeName })
+              .catch(this.error);
+          }
 
-        if (this.room && !this.room.modesMatch(room)) {
-          debug(`[${this.getName()}] Triggering mode change from ${this.room.modeName} to ${room.modeName}`);
-          // not needed, setCapabilityValue will trigger
-          // this.modeChangedTrigger.trigger(this, { mill_mode: room.modeName })
-          //   .catch(this.error);
-          this.modeChangedToTrigger.trigger(this, null, { mill_mode: room.modeName })
-            .catch(this.error);
+          this.room = new Room(room);
+          const jobs = [
+            this.setCapabilityValue('measure_temperature', room.avgTemp),
+            this.setCapabilityValue('mill_mode', room.modeName),
+            this.setCapabilityValue('mill_onoff', room.isHeating),
+            this.setCapabilityValue('measure_power', room.isHeating ? this.power : 1.5),
+            this.setCapabilityValue('onoff', room.modeName !== 'Off')
+          ];
+          if (room.modeName !== 'Off') {
+            jobs.push(this.setCapabilityValue('target_temperature', room.targetTemp));
+          }
+          return Promise.all(jobs).catch((err) => {
+            Log.captureException(err);
+          });
         }
-
-        this.room = new Room(room);
-        const jobs = [
-          this.setCapabilityValue('measure_temperature', room.avgTemp),
-          this.setCapabilityValue('mill_mode', room.modeName),
-          this.setCapabilityValue('mill_onoff', room.isHeating),
-          this.setCapabilityValue('measure_power', room.isHeating ? this.power : 1.5)
-        ];
-        if (room.modeName !== 'Off') {
-          jobs.push(this.setCapabilityValue('target_temperature', room.targetTemp));
-        }
-        return Promise.all(jobs).catch((err) => {
-          Log.captureException(err);
-        });
       }).catch((err) => {
         error(`[${this.getName()}] Error caught while refreshing state`, err);
       });
@@ -132,6 +145,7 @@ class MillDevice extends Homey.Device {
   }
 
   onDeleted() {
+    clearTimeout(this.refreshTimeout);
     debug('device deleted', this.getState());
   }
 
@@ -178,6 +192,13 @@ class MillDevice extends Homey.Device {
 
   onCapabilityThermostatMode(value, opts, callback) {
     this.setThermostatMode(value)
+      .then(result => callback(null, result))
+      .catch(err => callback(err));
+  }
+
+  onCapabilityOnOff(value, opts, callback) {
+    let mode = value ? 'Program' : 'Off';
+    this.setThermostatMode(mode)
       .then(result => callback(null, result))
       .catch(err => callback(err));
   }

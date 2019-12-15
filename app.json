@@ -313,6 +313,7 @@
       },
       "class": "thermostat",
       "capabilities": [
+        "onoff",
         "measure_temperature",
         "target_temperature",
         "mill_onoff",
