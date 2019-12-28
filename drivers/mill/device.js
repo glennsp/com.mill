@@ -114,6 +114,13 @@ class MillDevice extends Homey.Device {
           this.setCapabilityValue('mill_mode', room.modeName),
           this.setCapabilityValue('mill_onoff', room.isHeating)
         ];
+
+        if(this.hasCapability('measure_power')) {
+          const settings = this.getSettings();
+          if (settings.energy_consumption > 0)
+            jobs.push(this.setCapabilityValue('measure_power', room.isHeating ? settings.energy_consumption : 2));
+        }
+
         if (room.modeName !== 'Off') {
           jobs.push(this.setCapabilityValue('target_temperature', room.targetTemp));
         }

@@ -1,6 +1,6 @@
 {
   "id": "com.mill",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "compatibility": ">=1.5.0",
   "sdk": 2,
   "name": {
@@ -15,6 +15,14 @@
   "author": {
     "name": "Glenn S. Pedersen",
     "email": "glenn.pedersen@gmail.com"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Espen Ljosland",
+        "email": "espen@ljosland.com"
+      }
+    ]
   },
   "homeyCommunityTopicId": 3851,
   "contributing": {
@@ -33,15 +41,38 @@
   "capabilities": {
     "mill_onoff": {
       "type": "boolean",
+      "uiComponent": "sensor",
+      "icon": "/drivers/mill/assets/mill_onoff.svg",
+      "noblink": false,
       "title": {
-        "en": "State"
+        "en": "State",
+        "no": "Status"
+      },
+      "label": {
+        "true": {
+          "en": "Heating",
+          "no": "Varmer"
+        },
+        "false": {
+          "en": "Idle",
+          "no": "Inaktiv"
+        }
       },
       "desc": {
         "en": "State of the thermostat"
       },
       "getable": true,
       "setable": false,
-      "greyout": true
+      "greyout": true,
+      "insights": true,
+      "insightsTitleTrue": {
+        "en": "Heating",
+        "no": "Varmer"
+      },
+      "insightsTitleFalse": {
+        "en": "Idle",
+        "no": "Inaktiv"
+      }
     },
     "mill_mode": {
       "type": "enum",
@@ -282,6 +313,7 @@
       },
       "class": "thermostat",
       "capabilities": [
+        "measure_power",
         "measure_temperature",
         "target_temperature",
         "mill_onoff",
@@ -304,6 +336,35 @@
           "template": "add_devices"
         }
       ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Settings",
+            "no": "Innstillinger"
+          },
+          "children": [
+            {
+              "id": "energy_consumption",
+              "type": "number",
+              "label": {
+                "en": "Energy consumption when active",
+                "no": "Strømforbruk når aktiv"
+              },
+              "value": 1200,
+              "min": 100,
+              "max": 3600,
+              "units": {
+                "en": "Watt"
+              },
+              "hint": {
+                "en": "E.g. 1200 for AV1200WIFI/NE1200WIFI.",
+                "no": "F.eks. 1200 for AV1200WIFI/NE1200WIFI."
+              }
+            }
+          ]
+        }
+      ],
       "mobile": {
         "components": [
           {
@@ -317,9 +378,6 @@
               "mill_onoff"
             ],
             "options": {
-              "icons": {
-                "mill_onoff": "/drivers/mill/assets/mill_onoff.svg"
-              },
               "mill_onoff": {
                 "noblink": false,
                 "greyout": true,
