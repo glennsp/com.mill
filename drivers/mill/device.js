@@ -39,8 +39,8 @@ class MillDevice extends Homey.Device {
     this.setProgramAction
       .register()
       .registerRunListener((args) => {
-        debug(`[${this.getName()}] Flow changed mode to ${args.mill_mode}`);
-        return this.setThermostatMode(args.mill_mode);
+        debug(`[${args.device.getName()}] Flow changed mode to ${args.mill_mode}`);
+        return args.device.setThermostatMode(args.mill_mode);
       });
 
     this.refreshTimeout = null;
