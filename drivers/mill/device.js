@@ -38,7 +38,10 @@ class MillDevice extends Homey.Device {
     this.setProgramAction = new Homey.FlowCardAction('mill_set_mode');
     this.setProgramAction
       .register()
-      .registerRunListener(args => this.setThermostatMode(args.mill_program));
+      .registerRunListener((args) => {
+        debug(`[${this.getName()}] Flow changed mode to ${args.mill_mode}`);
+        return this.setThermostatMode(args.mill_mode);
+      });
 
     this.refreshTimeout = null;
     this.room = null;
@@ -87,7 +90,6 @@ class MillDevice extends Homey.Device {
       .then((room) => {
         debug(`[${this.getName()}] Mill state refreshed`, {
           comfortTemp: room.comfortTemp,
-          programMode: room.programMode,
           awayTemp: room.awayTemp,
           holidayTemp: room.holidayTemp,
           sleepTemp: room.sleepTemp,
@@ -107,12 +109,15 @@ class MillDevice extends Homey.Device {
         }
 
         this.room = new Room(room);
-        return Promise.all([
+        const jobs = [
           this.setCapabilityValue('measure_temperature', room.avgTemp),
-          this.setCapabilityValue('target_temperature', room.targetTemp),
           this.setCapabilityValue('mill_mode', room.modeName),
           this.setCapabilityValue('mill_onoff', room.isHeating)
-        ]).catch((err) => {
+        ];
+        if (room.modeName !== 'Off') {
+          jobs.push(this.setCapabilityValue('target_temperature', room.targetTemp));
+        }
+        return Promise.all(jobs).catch((err) => {
           Log.captureException(err);
         });
       }).catch((err) => {
@@ -125,13 +130,13 @@ class MillDevice extends Homey.Device {
   }
 
   onDeleted() {
-    debug('device deleted');
+    debug('device deleted', this.getState());
   }
 
   onCapabilityTargetTemperature(value, opts, callback) {
     debug(`onCapabilityTargetTemperature(${value})`);
     const temp = Math.ceil(value);
-    if (temp !== value) { // half degrees isn't supported by Mill, need to round it up
+    if (temp !== value && this.room.modeName !== 'Off') { // half degrees isn't supported by Mill, need to round it up
       this.setCapabilityValue('target_temperature', temp);
       debug(`onCapabilityTargetTemperature(${value}=>${temp})`);
     }
@@ -140,12 +145,12 @@ class MillDevice extends Homey.Device {
     millApi.changeRoomTemperature(this.deviceId, this.room)
       .then(() => {
         debug(`onCapabilityTargetTemperature(${temp}) done`);
-        debug(`Changed temp for ${this.room.roomName} to ${temp}: currentMode: ${this.room.currentMode}/${this.room.programMode}, comfortTemp: ${this.room.comfortTemp}, awayTemp: ${this.room.awayTemp}, avgTemp: ${this.room.avgTemp}, sleepTemp: ${this.room.sleepTemp}`);
+        debug(`[${this.getName()}] Changed temp to ${temp}: currentMode: ${this.room.currentMode}/${this.room.programMode}, comfortTemp: ${this.room.comfortTemp}, awayTemp: ${this.room.awayTemp}, avgTemp: ${this.room.avgTemp}, sleepTemp: ${this.room.sleepTemp}`);
         callback(null, temp);
-      }).catch((error) => {
+      }).catch((err) => {
         debug(`onCapabilityTargetTemperature(${temp}) error`);
-        debug(`Change temp for ${this.room.roomName} to ${temp} resultet in error`, error);
-        callback(error);
+        debug(`[${this.getName()}] Change temp to ${temp} resultet in error`, err);
+        callback(err);
       });
   }
 
@@ -153,15 +158,18 @@ class MillDevice extends Homey.Device {
     return new Promise((resolve, reject) => {
       const millApi = Homey.app.getMillApi();
       this.room.modeName = value;
-      Promise.all([
-        this.setCapabilityValue('target_temperature', this.room.targetTemp),
-        millApi.changeRoomMode(this.deviceId, this.room.currentMode)
-      ]).then(() => {
-        debug(`Changed mode for ${this.room.roomName} to ${value}: currentMode: ${this.room.currentMode}/${this.room.programMode}, comfortTemp: ${this.room.comfortTemp}, awayTemp: ${this.room.awayTemp}, avgTemp: ${this.room.avgTemp}, sleepTemp: ${this.room.sleepTemp}`);
+      const jobs = [];
+      if (this.room.modeName !== 'Off') {
+        jobs.push(this.setCapabilityValue('target_temperature', this.room.targetTemp));
+      }
+      jobs.push(millApi.changeRoomMode(this.deviceId, this.room.currentMode));
+
+      Promise.all(jobs).then(() => {
+        debug(`[${this.getName()}] Changed mode to ${value}: currentMode: ${this.room.currentMode}/${this.room.programMode}, comfortTemp: ${this.room.comfortTemp}, awayTemp: ${this.room.awayTemp}, avgTemp: ${this.room.avgTemp}, sleepTemp: ${this.room.sleepTemp}`);
         resolve(value);
-      }).catch((error) => {
-        debug(`Change mode for ${this.room.roomName} to ${value} resultet in error`, error);
-        reject(error);
+      }).catch((err) => {
+        error(`[${this.getName()}] Change mode to ${value} resulted in error`, err);
+        reject(err);
       });
     });
   }

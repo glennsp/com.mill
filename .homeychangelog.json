@@ -1,0 +1,20 @@
+{
+  "0.0.1": {
+    "en": "First version"
+  },
+  "0.0.2": {
+    "en": "Added Sentry logging"
+  },
+  "1.0.0": {
+    "en": "Added logging interface"
+  },
+  "1.0.3": {
+    "en": "Fixed 'Set mode' problems with flow cards"
+  },
+  "1.0.4": {
+    "en": "Changed Mill endpoint, fixed problems where heaters couldn't be reinstalled after being deleted and fixed problems with flow cards"
+  },
+  "1.0.5": {
+    "en": "Support for new app store"
+  }
+}

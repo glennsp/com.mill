@@ -4,7 +4,12 @@ Athom Homey support for for [Mill WiFi](https://www.millheat.com/mill-wifi/) hea
 
 ### Supported devices
 
-All Mill WiFi heaters should in theory be supported, but only AV1200WIFI and AV1000LWIFI have been tested.
+All Mill WiFi heaters should in theory be supported.
+The following devices has been tested by the community and reported working:
+* AV600WIFI
+* AV1000LWIFI
+* AV1200WIFI
+* NE600WIFI
 
 ### Flow cards
 The module supports all normal thermostat triggers, conditions and actions, but also has a few in addition.
@@ -45,6 +50,17 @@ This app is using [sentry.io](http://sentry.io) to log exceptions and errors. By
 Use this app at your own risk. The app has been developed with the same APIs and interfaces used by the official Mill app, but there is a chance that the API calls can have unexpected consequences for which nobody but you are responsible.
 
 ### Change Log:
+
+##### v1.0.5
+* Support for new app store
+
+##### v1.0.4
+* Changed Mill endpoint
+* Fixed problems where heaters couldn't be reinstalled after being deleted
+* Fixed problems with flow cards
+
+##### v1.0.3
+* Fixed "Set mode" problems with flow cards
 
 ##### v1.0.0
 * Added logging interface

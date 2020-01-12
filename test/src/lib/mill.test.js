@@ -23,6 +23,10 @@ describe('mill', () => {
     };
   });
 
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
   describe('login', () => {
     it('should not log in with wrong credentials', async () => {
       nock('https://eurouter.ablecloud.cn:9005')
@@ -62,7 +66,7 @@ describe('mill', () => {
 
   describe('homes', () => {
     it('should read all homes correctly', async () => {
-      nock('http://eurouter.ablecloud.cn:5000')
+      nock('http://eurouter.ablecloud.cn:9005')
         .post('/millService/v1/selectHomeList')
         .reply(200, fs.readFileSync('./test/resources/homes.json'));
 
@@ -74,7 +78,7 @@ describe('mill', () => {
   describe('rooms', () => {
     it('should read all rooms correctly', async () => {
       const roomId = 201810061300100000;
-      nock('http://eurouter.ablecloud.cn:5000')
+      nock('http://eurouter.ablecloud.cn:9005')
         .post('/millService/v1/selectRoombyHome')
         .reply(200, fs.readFileSync('./test/resources/room.json'));
       const rooms = await this.mill.listRooms(roomId);
@@ -85,7 +89,7 @@ describe('mill', () => {
   describe('devices', () => {
     it('should read all devices correctly', async () => {
       const roomId = 201810061300100000;
-      nock('http://eurouter.ablecloud.cn:5000')
+      nock('http://eurouter.ablecloud.cn:9005')
         .post('/millService/v1/selectDevicebyRoom')
         .reply(200, fs.readFileSync('./test/resources/devices.json'));
       const room = await this.mill.listDevices(roomId);
@@ -96,7 +100,7 @@ describe('mill', () => {
 
   describe('settings', () => {
     it('should set temperature correctly', async () => {
-      nock('http://eurouter.ablecloud.cn:5000')
+      nock('http://eurouter.ablecloud.cn:9005')
         .post('/millService/v1/changeRoomModeTempInfo')
         .reply(200, '');
 
@@ -107,7 +111,7 @@ describe('mill', () => {
     });
 
     it('should set mode correctly', async () => {
-      nock('http://eurouter.ablecloud.cn:5000')
+      nock('http://eurouter.ablecloud.cn:9005')
         .post('/millService/v1/changeRoomMode')
         .reply(200, '');
 

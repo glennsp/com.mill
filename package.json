@@ -1,26 +1,28 @@
 {
   "name": "com.mill",
-  "version": "1.0.3",
-  "description": "Homey app for WiFi heating devices from Mill",
+  "version": "1.0.5",
+  "description": "Integrate Mill WiFi heating devices with Homey",
   "main": "app.js",
   "dependencies": {
     "homey-log": "1.0.6",
     "node-fetch": "2.2.0"
   },
   "devDependencies": {
+    "@milanzor/homey-mock": "1.1.0",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "eslint": "5.7.0",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.14.0",
     "mocha": "5.2.0",
+    "mock-require": "3.0.3",
     "nock": "10.0.1",
     "proxyquire": "2.1.0"
   },
   "scripts": {
     "deploy": "rm -fr node_modules; npm install --production; athom app install",
     "start": "rm -fr node_modules; npm install --production; athom app run",
-    "test": "mocha test/src"
+    "test": "mocha test/src/**"
   },
   "repository": {
     "type": "git",
