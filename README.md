@@ -38,6 +38,9 @@ When you change the mode, the temperature will change to that mode's temperature
 
 If you select the mode _Program_, the Mill service will take control and adjust the mode during the day according to the program you set up on the Mill app. The device will then change to the current thermostat mode.
 
+###### Energy
+The default power consumption is set to 1200W, please adjust this to match you model in the device advanced settings.
+
 ### Supported Languages:
 
 * English
@@ -53,7 +56,8 @@ Use this app at your own risk. The app has been developed with the same APIs and
 ### Change Log:
 
 ##### v1.0.6
-Added support for Energy (requires re-pairing if device is added prior to version 1.0.6). Set power consumption in the device settings to match the heater model.
+* Added support for Energy (may require re-pairing if device is added prior to version 1.0.6)
+* Fixed issues with flows with multiple devices
 
 ##### v1.0.5
 * Support for new app store
