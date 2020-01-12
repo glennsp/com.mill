@@ -2,9 +2,12 @@ Mill WiFi heaters
 
 This app integrates Mill WiFi heaters with Athom Homey.
 
+Now also supports Energy (requires re-pairing if device is added prior to version 1.0.6). Set power consumption in the device settings to match the heater model.
+
 All Mill WiFi heaters should in theory be supported.
 The following devices has been tested by the community and reported working:
     - AV600WIFI
+    - AV800LWIFI
     - AV1000LWIFI
     - AV1200WIFI
     - NE600WIFI
