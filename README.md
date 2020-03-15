@@ -7,9 +7,11 @@ Athom Homey support for for [Mill WiFi](https://www.millheat.com/mill-wifi/) hea
 All Mill WiFi heaters should in theory be supported.
 The following devices has been tested by the community and reported working:
 * AV600WIFI
+* AV800LWIFI
 * AV1000LWIFI
 * AV1200WIFI
 * NE600WIFI
+* NE1200WIFI
 
 ### Flow cards
 The module supports all normal thermostat triggers, conditions and actions, but also has a few in addition.
@@ -29,6 +31,9 @@ Supported actions:
 
 Open Settings and enter you Mill credentials before trying to add any Mill heaters.
 
+### Device Settings
+The default power consumption is set to 1200W, please adjust this to match you model in the device advanced settings.
+
 ### Usage
 
 The Mill service has three modes, _Comfort_, _Sleep_ and _Away_. (There's also a _Holiday_ mode exposed in the API, but not supported in the Mill UI yet).
@@ -37,9 +42,11 @@ When you change the mode, the temperature will change to that mode's temperature
 
 If you select the mode _Program_, the Mill service will take control and adjust the mode during the day according to the program you set up on the Mill app. The device will then change to the current thermostat mode.
 
-### Supported Languages:
+### Supported Languages
 
 * English
+* Norwegian
+* Dutch
 
 ### Privacy
 
@@ -50,6 +57,17 @@ This app is using [sentry.io](http://sentry.io) to log exceptions and errors. By
 Use this app at your own risk. The app has been developed with the same APIs and interfaces used by the official Mill app, but there is a chance that the API calls can have unexpected consequences for which nobody but you are responsible.
 
 ### Change Log:
+
+##### v1.0.7
+* Added more languages
+* Improved logging
+* Validating Mill API requests
+
+##### v1.0.6
+* Added support for Energy (may require re-pairing if device is added prior to version 1.0.6)
+* Fixed issues with flows with multiple devices
+* Added Norwegian and Dutch
+* Added single click on/off
 
 ##### v1.0.5
 * Support for new app store
