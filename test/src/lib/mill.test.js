@@ -66,7 +66,7 @@ describe('mill', () => {
 
   describe('homes', () => {
     it('should read all homes correctly', async () => {
-      nock('http://eurouter.ablecloud.cn:9005')
+      nock('https://eurouter.ablecloud.cn:9005')
         .post('/millService/v1/selectHomeList')
         .reply(200, fs.readFileSync('./test/resources/homes.json'));
 
@@ -78,7 +78,7 @@ describe('mill', () => {
   describe('rooms', () => {
     it('should read all rooms correctly', async () => {
       const roomId = 201810061300100000;
-      nock('http://eurouter.ablecloud.cn:9005')
+      nock('https://eurouter.ablecloud.cn:9005')
         .post('/millService/v1/selectRoombyHome')
         .reply(200, fs.readFileSync('./test/resources/room.json'));
       const rooms = await this.mill.listRooms(roomId);
@@ -88,19 +88,38 @@ describe('mill', () => {
 
   describe('devices', () => {
     it('should read all devices correctly', async () => {
-      const roomId = 201810061300100000;
-      nock('http://eurouter.ablecloud.cn:9005')
+      const roomId = 201810061347140000;
+      nock('https://eurouter.ablecloud.cn:9005')
         .post('/millService/v1/selectDevicebyRoom')
         .reply(200, fs.readFileSync('./test/resources/devices.json'));
       const room = await this.mill.listDevices(roomId);
+      // eslint-disable-next-line no-unused-expressions
       expect(room.error).to.not.exist;
       expect(room).to.be.an.instanceof(Room);
+      expect(room.roomId).to.equal(roomId);
+      // eslint-disable-next-line no-unused-expressions
+      expect(room.comfortTemp).to.exist;
+    });
+
+    it('should handle errors correctly', async () => {
+      const roomId = 201810061300100000;
+      nock('https://eurouter.ablecloud.cn:9005')
+        .post('/millService/v1/selectDevicebyRoom')
+        .reply(200, '{}');
+      try {
+        await this.mill.listDevices(roomId);
+        // eslint-disable-next-line no-unused-expressions
+        expect(true).to.be.false;
+      } catch (e) {
+        // eslint-disable-next-line no-unused-expressions
+        expect(e).to.exist;
+      }
     });
   });
 
   describe('settings', () => {
     it('should set temperature correctly', async () => {
-      nock('http://eurouter.ablecloud.cn:9005')
+      nock('https://eurouter.ablecloud.cn:9005')
         .post('/millService/v1/changeRoomModeTempInfo')
         .reply(200, '');
 
@@ -111,7 +130,7 @@ describe('mill', () => {
     });
 
     it('should set mode correctly', async () => {
-      nock('http://eurouter.ablecloud.cn:9005')
+      nock('https://eurouter.ablecloud.cn:9005')
         .post('/millService/v1/changeRoomMode')
         .reply(200, '');
 

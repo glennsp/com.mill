@@ -16,5 +16,11 @@
   },
   "1.0.5": {
     "en": "Support for new app store"
+  },
+  "1.0.6": {
+    "en": "Added support for Energy (may require re-pairing if device is added prior to version 1.0.6) and fixed issues with flows with multiple devices"
+  },
+  "1.0.7": {
+    "en": "Improved logging and Mill API validation"
   }
 }
