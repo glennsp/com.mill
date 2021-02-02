@@ -22,5 +22,8 @@
   },
   "1.0.7": {
     "en": "Improved logging and Mill API validation"
+  },
+  "1.0.8": {
+    "en": "Fixed problems with setting temperature"
   }
 }
