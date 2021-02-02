@@ -1,9 +1,3 @@
-Mill WiFi heaters
-
-This app integrates Mill WiFi heaters with Athom Homey.
-
-Now also supports Energy (requires re-pairing if device is added prior to version 1.0.6). Set power consumption in the device settings to match the heater model.
-
 All Mill WiFi heaters should in theory be supported.
 The following devices has been tested by the community and reported working:
     - AV600WIFI
@@ -37,6 +31,10 @@ The Mill service has three modes, Comfort, Sleep and Away.
 When you change the mode, the temperature will change to that mode's temperature set point. Adjusting the temperature changes the set point for that mode.
 
 If you select the mode "Program", the Mill service will take control and adjust the mode during the day according to the program you set up on the Mill app. The device will then change to the current thermostat mode.
+
+Tip: If you want Homey to have complete control, make sure to turn on "Control Device Individually" in the Mill app. If not, the Mill app can override Homey.
+
+Now also supports Energy (requires re-pairing if device is added prior to version 1.0.6). Set power consumption in the device settings to match the heater model.
 
 Supported Languages:
     - English

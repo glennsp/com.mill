@@ -58,6 +58,10 @@ Use this app at your own risk. The app has been developed with the same APIs and
 
 ### Change Log:
 
+##### v1.0.8
+* Updated temperature change endpont
+* Improved feedback on errors
+
 ##### v1.0.7
 * Added more languages
 * Improved logging
