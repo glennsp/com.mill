@@ -122,7 +122,7 @@ class MillDevice extends Homey.Device {
 
           this.room = new Room(room);
           const jobs = [
-            this.setCapabilityValue('measure_temperature', room.avgTemp),
+            this.setCapabilityValue('measure_temperature', ((Math.log10((room.avgTemp ^ (room.avgTemp >> 31)) - (room.avgTemp >> 31)) | 0) + 1) > 2 ? Math.round(room.avgTemp / 100) : room.avgTemp),
             this.setCapabilityValue('mill_mode', room.modeName),
             this.setCapabilityValue('mill_onoff', room.isHeating),
             this.setCapabilityValue('onoff', room.modeName !== 'Off')
