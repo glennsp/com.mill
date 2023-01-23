@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/no-unresolved
 const Homey = require('homey');
 const Mill = require('./lib/mill');
-const { debug } = require('./lib/util');
 
 class MillApp extends Homey.App {
   onInit() {
@@ -9,13 +8,13 @@ class MillApp extends Homey.App {
     this.user = null;
     this.isAuthenticated = false;
     this.isAuthenticating = false;
-
-    debug(`${Homey.manifest.id} is running..`);
+    
+    this.log(`${Homey.manifest.id} is running..`);
   }
 
   async connectToMill() {
-    const username = Homey.ManagerSettings.get('username');
-    const password = Homey.ManagerSettings.get('password');
+    const username = this.homey.settings.get('username');
+    const password = this.homey.settings.get('password');
 
     return this.authenticate(username, password);
   }
@@ -26,7 +25,7 @@ class MillApp extends Homey.App {
         this.isAuthenticating = true;
         this.user = await this.millApi.login(username, password) || null;
         this.isAuthenticated = true;
-        debug('Mill authenticated');
+        this.log('Mill authenticated');
         return true;
       } finally {
         this.isAuthenticating = false;

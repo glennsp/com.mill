@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
 const Homey = require('homey');
-const { debug } = require('./../../lib/util');
 
 class MillDriver extends Homey.Driver {
   async onInit() {
@@ -9,17 +8,17 @@ class MillDriver extends Homey.Driver {
   async onPairListDevices(data, callback) {
     if (!Homey.app.isConnected()) {
       // eslint-disable-next-line no-underscore-dangle
-      debug('Unable to pair, not authenticated');
+      this.log('Unable to pair, not authenticated');
       callback(new Error(Homey.__('pair.messages.notAuthorized')));
     } else {
-      debug('Pairing');
+      this.log('Pairing');
       const millApi = Homey.app.getMillApi();
       const homes = await millApi.listHomes();
-      debug(`Found following homes: ${homes.homeList.map(home => `${home.homeName} (${home.homeId})`).join(', ')}`);
+      this.log(`Found following homes: ${homes.homeList.map(home => `${home.homeName} (${home.homeId})`).join(', ')}`);
 
       const rooms = await Promise.all(homes.homeList.map(async (home) => {
         const rooms = await millApi.listRooms(home.homeId);
-        debug(`Found following rooms in ${home.homeName}: ${rooms.roomInfo.map(room => `${room.roomName} (${room.roomId})`).join(', ')}`);
+        this.log(`Found following rooms in ${home.homeName}: ${rooms.roomInfo.map(room => `${room.roomName} (${room.roomId})`).join(', ')}`);
 
         return rooms.roomInfo.map(room => (
           {
