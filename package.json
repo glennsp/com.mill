@@ -4,11 +4,12 @@
   "description": "Integrate Mill WiFi heating devices with Homey",
   "main": "app.js",
   "dependencies": {
-    "@sentry/node": "5.14.1",
-    "node-fetch": "2.6.0"
+    "@sentry/node": "7.31.1",
+    "node-fetch": "^2.6.2"
   },
   "devDependencies": {
     "@milanzor/homey-mock": "1.1.0",
+    "@types/node-fetch": "^2.6.2",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "eslint": "6.8.0",
